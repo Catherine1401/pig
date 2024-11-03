@@ -17,6 +17,9 @@ public class LoginController implements ActionListener {
         String clm = e.getActionCommand();
         switch (clm) {
             case "Login" -> view.login();
+            case "Sign up" -> view.signup();
+            case "Create" -> view.create();
+            case "Cancel" -> view.cancel();
         }
     }
 

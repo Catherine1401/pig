@@ -18,7 +18,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
-import java.util.InputMismatchException;
 
 public class LoginView extends JFrame {
     private CardLayout cardLayout;
@@ -26,10 +25,14 @@ public class LoginView extends JFrame {
 
     private final CustomerManager cManager =  new CustomerManager();
 
-    private JTextField jFieldUsername;
-    private JPasswordField jFieldPassword;
+    private JTextField jFieldUsernameLogin;
+    private JPasswordField jFieldPasswordLogin;
+    private JTextField jFieldUsernameSignup;
+    private JPasswordField jFieldPasswordSignup;
     private JButton jButtonLogin;
     private JButton jButtonSignup;
+    private JButton jButtonCreate;
+    private JButton jButtonCancel;
 
     public LoginView() {
         init();
@@ -46,6 +49,7 @@ public class LoginView extends JFrame {
         mainView = new JPanel(cardLayout);
        
         mainView.add(loginView(), "loginview");
+        mainView.add(signupView(), "signupview");
         add(mainView);
 
         cardLayout.first(mainView);
@@ -70,13 +74,13 @@ public class LoginView extends JFrame {
         // set username textfield
         gbc.gridx = 1;
         gbc.insets = new Insets(0, 0, 15, 0);
-        jFieldUsername = new JTextField();
         Font fontPlain = new Font("Roboto", Font.PLAIN, 15);
-        jFieldUsername.setFont(fontPlain);
+        jFieldUsernameLogin = new JTextField();
+        jFieldUsernameLogin.setFont(fontPlain);
         Dimension dimension = new Dimension(200, 30);
-        jFieldUsername.setPreferredSize(dimension);
+        jFieldUsernameLogin.setPreferredSize(dimension);
         
-        jPanelLogin.add(jFieldUsername, gbc);
+        jPanelLogin.add(jFieldUsernameLogin, gbc);
 
         // set password label
         gbc.gridx = 0;
@@ -87,13 +91,13 @@ public class LoginView extends JFrame {
 
         jPanelLogin.add(jLabelPassword, gbc);
 
-        // set passroed textfield
+        // set password textfield
         gbc.gridx = 1;
         gbc.insets = new Insets(0, 0, 15, 0);
-        jFieldPassword = new JPasswordField();
-        jFieldPassword.setPreferredSize(dimension);
+        jFieldPasswordLogin = new JPasswordField();
+        jFieldPasswordLogin.setPreferredSize(dimension);
 
-        jPanelLogin.add(jFieldPassword, gbc);
+        jPanelLogin.add(jFieldPasswordLogin, gbc);
 
         // set button login
         gbc.gridx = 0;
@@ -119,14 +123,108 @@ public class LoginView extends JFrame {
         return jPanelLogin;
     }
 
+    public JPanel signupView() {
+        JPanel jPanelSignup = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        // --- set sign up view ---
+        // set username label
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(0, 0, 15, 15);
+        gbc.anchor = GridBagConstraints.EAST;
+        JLabel jLabelUsername = new JLabel("Username");
+        Font fontBold = new Font("Roboto", Font.BOLD, 15);
+        jLabelUsername.setFont(fontBold);
+
+        jPanelSignup.add(jLabelUsername, gbc);
+
+        // set username textfield
+        gbc.gridx = 1;
+        gbc.insets = new Insets(0, 0, 15, 0);
+        Font fontPlain = new Font("Roboto", Font.PLAIN, 15);
+        jFieldUsernameSignup = new JTextField();
+        jFieldUsernameSignup.setFont(fontPlain);
+        Dimension dimension = new Dimension(200, 30);
+        jFieldUsernameSignup.setPreferredSize(dimension);
+        
+        jPanelSignup.add(jFieldUsernameSignup, gbc);
+
+        // set password label
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.insets = new Insets(0, 0, 15, 15);
+        JLabel jLabelPassword = new JLabel("Password");
+        jLabelPassword.setFont(fontBold);
+
+        jPanelSignup.add(jLabelPassword, gbc);
+
+        // set password textfield
+        gbc.gridx = 1;
+        gbc.insets = new Insets(0, 0, 15, 0);
+        jFieldPasswordSignup = new JPasswordField();
+        jFieldPasswordSignup.setPreferredSize(dimension);
+
+        jPanelSignup.add(jFieldPasswordSignup, gbc);
+
+        // set button create
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(30, 50, 0, 0);
+        jButtonCreate = new JButton("Create");
+        jButtonCreate.setFont(fontBold);
+        ActionListener actionListener = new LoginController(this);
+        jButtonCreate.addActionListener(actionListener);
+        
+        jPanelSignup.add(jButtonCreate, gbc);
+
+        // set button cancel
+        gbc.gridx = 1;
+        gbc.insets = new Insets(30, 40, 0, 0);
+        jButtonCancel = new JButton("Cancel");
+        jButtonCancel.setFont(fontBold);
+        jButtonCancel.addActionListener(actionListener);
+
+        jPanelSignup.add(jButtonCancel, gbc);
+
+        return jPanelSignup;
+    }
+
+    public void signup() {
+        cardLayout.last(mainView);
+    }
+
     public void login() {
-        String username = jFieldUsername.getText();
-        String password = new String(jFieldPassword.getPassword());
-        try {
-            cManager.checkInfo(username, password);
-            JOptionPane.showMessageDialog(null, "Successfully!", "successfully", JOptionPane.CLOSED_OPTION);
-        } catch (InputMismatchException ime) {
-            JOptionPane.showMessageDialog(null, ime.getMessage(), "ERORR", JOptionPane.ERROR_MESSAGE);
+        String username = jFieldUsernameLogin.getText();
+        String password = new String(jFieldPasswordLogin.getPassword());
+        if (cManager.checkLogin(username, password)) {
+            JOptionPane.showMessageDialog(null, "Successfully!", "CLM", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            jFieldUsernameLogin.setText("");
+            jFieldPasswordLogin.setText("");
+            JOptionPane.showMessageDialog(null, "Username or password is incorrect!", "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public void cancel() {
+        jFieldUsernameLogin.setText("");
+        jFieldPasswordLogin.setText("");
+        cardLayout.first(mainView);
+    }
+
+    public void create() {
+        String username = jFieldUsernameSignup.getText();
+        String password = new String(jFieldPasswordSignup.getPassword());
+        if (cManager.checkSignup(username, password)) {
+            jFieldUsernameLogin.setText("");
+            jFieldPasswordLogin.setText("");
+            cardLayout.first(mainView);
+            JOptionPane.showMessageDialog(null, "Account created successfully. Please log in to continue!", "SUCCESS", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            jFieldUsernameSignup.setText("");
+            jFieldPasswordSignup.setText("");
+            JOptionPane.showMessageDialog(null, "Username already exits. Try another!", "ERROR", JOptionPane.ERROR_MESSAGE);
         }
     }
 }
