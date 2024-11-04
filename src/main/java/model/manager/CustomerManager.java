@@ -8,17 +8,18 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.InputMismatchException;
 import java.util.Map;
 
-public class CustomerManager {
-    private final File info = new File("src/resources/login.txt");
-    private final Map<String, String> list = new HashMap<>();
+import model.checker.Checker;
 
+public class CustomerManager {
     public CustomerManager() {
     }
 
-    public boolean checkLogin(String username, String password) {
-        try (BufferedReader bReader = new BufferedReader(new FileReader(info))) {
+    public boolean checkLogin(String username, String password) throws InputMismatchException {
+        Checker.checker(username, password);
+        try (BufferedReader bReader = new BufferedReader(new FileReader(new File("src/resources/login.txt")))) {
             String line;
             while ((line = bReader.readLine()) != null) {
                 String[] data = line.split(";");
@@ -34,6 +35,9 @@ public class CustomerManager {
     }
 
     public boolean checkSignup(String username, String password) {
+        Checker.checker(username, password);
+        File info = new File("src/resources/login.txt");
+        Map<String, String> list = new HashMap<>();
         try (BufferedReader bReader = new BufferedReader(new FileReader(info))) {
             String line;
             while ((line = bReader.readLine()) != null) {

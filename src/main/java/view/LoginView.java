@@ -18,6 +18,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
+import java.util.InputMismatchException;
 
 public class LoginView extends JFrame {
     private CardLayout cardLayout;
@@ -191,6 +192,16 @@ public class LoginView extends JFrame {
         return jPanelSignup;
     }
 
+    public void resetLogin() {
+        jFieldUsernameLogin.setText("");
+        jFieldPasswordLogin.setText("");
+    }
+
+    public void resetSignup() {
+        jFieldUsernameSignup.setText("");
+        jFieldPasswordSignup.setText("");
+    }
+
     public void signup() {
         cardLayout.last(mainView);
     }
@@ -198,33 +209,41 @@ public class LoginView extends JFrame {
     public void login() {
         String username = jFieldUsernameLogin.getText();
         String password = new String(jFieldPasswordLogin.getPassword());
-        if (cManager.checkLogin(username, password)) {
-            JOptionPane.showMessageDialog(null, "Successfully!", "CLM", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            jFieldUsernameLogin.setText("");
-            jFieldPasswordLogin.setText("");
-            JOptionPane.showMessageDialog(null, "Username or password is incorrect!", "ERROR", JOptionPane.ERROR_MESSAGE);
+        try {
+            if (cManager.checkLogin(username, password)) {
+                JOptionPane.showMessageDialog(null, "Successfully!", "CLM", JOptionPane.INFORMATION_MESSAGE);
+            }
+            else {
+                resetLogin();
+                JOptionPane.showMessageDialog(null, "Username or password is incorrect!", "ERROR", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (InputMismatchException ime) {
+            JOptionPane.showMessageDialog(null, ime.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
         }
+        
     }
 
     public void cancel() {
-        jFieldUsernameLogin.setText("");
-        jFieldPasswordLogin.setText("");
+        resetLogin();
         cardLayout.first(mainView);
     }
 
     public void create() {
         String username = jFieldUsernameSignup.getText();
         String password = new String(jFieldPasswordSignup.getPassword());
-        if (cManager.checkSignup(username, password)) {
-            jFieldUsernameLogin.setText("");
-            jFieldPasswordLogin.setText("");
-            cardLayout.first(mainView);
-            JOptionPane.showMessageDialog(null, "Account created successfully. Please log in to continue!", "SUCCESS", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            jFieldUsernameSignup.setText("");
-            jFieldPasswordSignup.setText("");
-            JOptionPane.showMessageDialog(null, "Username already exits. Try another!", "ERROR", JOptionPane.ERROR_MESSAGE);
+        try {
+            if (cManager.checkSignup(username, password)) {
+                resetLogin();
+                resetSignup();
+                cardLayout.first(mainView);
+                JOptionPane.showMessageDialog(null, "Account created successfully. Please log in to continue!", "SUCCESS", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                resetSignup();
+                resetLogin();
+                JOptionPane.showMessageDialog(null, "Username already exits. Try another!", "ERROR", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (InputMismatchException ime) {
+            JOptionPane.showMessageDialog(null, ime.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
         }
     }
 }
