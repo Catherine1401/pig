@@ -24,7 +24,7 @@ public class LoginView extends JFrame {
     private CardLayout cardLayout;
     private JPanel mainView;
 
-    private final CustomerManager cManager =  new CustomerManager();
+    private final CustomerManager cManager = new CustomerManager();
 
     private JTextField jFieldUsernameLogin;
     private JPasswordField jFieldPasswordLogin;
@@ -48,7 +48,7 @@ public class LoginView extends JFrame {
 
         cardLayout = new CardLayout();
         mainView = new JPanel(cardLayout);
-       
+
         mainView.add(loginView(), "loginview");
         mainView.add(signupView(), "signupview");
         add(mainView);
@@ -60,7 +60,7 @@ public class LoginView extends JFrame {
         JPanel jPanelLogin = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
-         // --- set login view ---
+        // --- set login view ---
         // set username label
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -80,7 +80,7 @@ public class LoginView extends JFrame {
         jFieldUsernameLogin.setFont(fontPlain);
         Dimension dimension = new Dimension(200, 30);
         jFieldUsernameLogin.setPreferredSize(dimension);
-        
+
         jPanelLogin.add(jFieldUsernameLogin, gbc);
 
         // set password label
@@ -109,7 +109,7 @@ public class LoginView extends JFrame {
         jButtonLogin.setFont(fontBold);
         ActionListener actionListener = new LoginController(this);
         jButtonLogin.addActionListener(actionListener);
-        
+
         jPanelLogin.add(jButtonLogin, gbc);
 
         // set button signup
@@ -148,7 +148,7 @@ public class LoginView extends JFrame {
         jFieldUsernameSignup.setFont(fontPlain);
         Dimension dimension = new Dimension(200, 30);
         jFieldUsernameSignup.setPreferredSize(dimension);
-        
+
         jPanelSignup.add(jFieldUsernameSignup, gbc);
 
         // set password label
@@ -177,7 +177,7 @@ public class LoginView extends JFrame {
         jButtonCreate.setFont(fontBold);
         ActionListener actionListener = new LoginController(this);
         jButtonCreate.addActionListener(actionListener);
-        
+
         jPanelSignup.add(jButtonCreate, gbc);
 
         // set button cancel
@@ -210,17 +210,19 @@ public class LoginView extends JFrame {
         String username = jFieldUsernameLogin.getText();
         String password = new String(jFieldPasswordLogin.getPassword());
         try {
-            if (cManager.checkLogin(username, password)) {
+            if (username.equals("admin") && password.equals("123654")) {
+                new AdminView();
+                setVisible(false);
+            } else if (cManager.checkLogin(username, password)) {
                 JOptionPane.showMessageDialog(null, "Successfully!", "CLM", JOptionPane.INFORMATION_MESSAGE);
-            }
-            else {
+            } else {
                 resetLogin();
-                JOptionPane.showMessageDialog(null, "Username or password is incorrect!", "ERROR", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Username or password is incorrect!", "ERROR",
+                        JOptionPane.ERROR_MESSAGE);
             }
         } catch (InputMismatchException ime) {
             JOptionPane.showMessageDialog(null, ime.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
         }
-        
     }
 
     public void cancel() {
@@ -236,11 +238,13 @@ public class LoginView extends JFrame {
                 resetLogin();
                 resetSignup();
                 cardLayout.first(mainView);
-                JOptionPane.showMessageDialog(null, "Account created successfully. Please log in to continue!", "SUCCESS", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Account created successfully. Please log in to continue!",
+                        "SUCCESS", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 resetSignup();
                 resetLogin();
-                JOptionPane.showMessageDialog(null, "Username already exits. Try another!", "ERROR", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Username already exits. Try another!", "ERROR",
+                        JOptionPane.ERROR_MESSAGE);
             }
         } catch (InputMismatchException ime) {
             JOptionPane.showMessageDialog(null, ime.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);

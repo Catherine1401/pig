@@ -521,13 +521,12 @@ public class AdminView extends JFrame {
             try {
                 String type = jBoxTypeFromStockup.getSelectedItem() == null ? "" : jBoxTypeFromStockup.getSelectedItem().toString();
                 String vaccine = jBoxVaccineStockup.getSelectedItem() == null ? "" : jBoxVaccineStockup.getSelectedItem().toString();
-                sManager.filterAnd(jFieldIdFromStockup.getText(), jFieldIdToStockup.getText(), 
+                jTableStockup.setModel(sManager.filterAnd(jFieldIdFromStockup.getText(), jFieldIdToStockup.getText(), 
                 type, jFieldQuantityFromStockup.getText(), 
                 jFieldQuantityToStockup.getText(), jFieldPriceFromStockup.getText(), 
                 jFieldPriceToStockup.getText(), jFieldAgeFromStockup.getText(), 
                 jFieldAgeToStockup.getText(), jFieldDateFromStockup.getText(), 
-                jFieldDateToStockup.getText(), vaccine);
-                jTableStockup.setModel(sManager.getdModel());
+                jFieldDateToStockup.getText(), vaccine));;
             } catch (InputMismatchException ime) {
                 JOptionPane.showMessageDialog(null, ime.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
             }
@@ -535,13 +534,12 @@ public class AdminView extends JFrame {
             try {
                 String type = jBoxTypeFromStockup.getSelectedItem() == null ? "" : jBoxTypeFromStockup.getSelectedItem().toString();
                 String vaccine = jBoxVaccineStockup.getSelectedItem() == null ? "" : jBoxVaccineStockup.getSelectedItem().toString();
-                sManager.filterOr(jFieldIdFromStockup.getText(), jFieldIdToStockup.getText(), 
+                jTableStockup.setModel(sManager.filterOr(jFieldIdFromStockup.getText(), jFieldIdToStockup.getText(), 
                 type, jFieldQuantityFromStockup.getText(), 
                 jFieldQuantityToStockup.getText(), jFieldPriceFromStockup.getText(), 
                 jFieldPriceToStockup.getText(), jFieldAgeFromStockup.getText(), 
                 jFieldAgeToStockup.getText(), jFieldDateFromStockup.getText(), 
-                jFieldDateToStockup.getText(), vaccine);
-                jTableStockup.setModel(sManager.getdModel());
+                jFieldDateToStockup.getText(), vaccine));
             } catch (InputMismatchException ime) {
                 JOptionPane.showMessageDialog(null, ime.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
             }

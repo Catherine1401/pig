@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.net.Inet4Address;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.text.ParseException;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -17,6 +18,7 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
+import java.util.Vector;
 
 import javax.swing.JTable;
 import javax.swing.RowFilter;
@@ -101,7 +103,6 @@ public class StockupManager {
                             dModel.addRow(
                                 new Object[] { row[0], row[1], row[2], dFormat.format(Long.parseLong(row[3])), row[4], row[5], row[6] });
                         }
-                        
                     }
                 } catch (FileNotFoundException fnfe) {
                     fnfe.getStackTrace();
@@ -111,7 +112,7 @@ public class StockupManager {
     }
 
     // filter and
-    public void filterAnd(String idF, String idT, String type, String quantityF, String quantityT,
+    public DefaultTableModel filterAnd(String idF, String idT, String type, String quantityF, String quantityT,
             String priceF, String priceT, String ageF, String ageT, String dateF, String dateT, String vaccine)
             throws InputMismatchException {
 
@@ -127,95 +128,98 @@ public class StockupManager {
         LocalDate datef = parse(dateF, LocalDate.MIN);
         LocalDate datet = parse(dateT, LocalDate.MAX);
 
-        dModel = new DefaultTableModel();
-        dModel.setColumnIdentifiers(
-                new String[] { "ID", "Giống Lợn", "Số Lượng", "Giá", "Ngày Tuổi", "Ngày Nhập", "Tiêm Chủng" });
-        try (BufferedReader bReader = new BufferedReader(new FileReader(new File("src/resources/stockup.txt")))) {
-            String line;
-            while ((line = bReader.readLine()) != null) {
-                // parse
-                String[] row = line.split(";");
-                int id = Integer.parseInt(row[0]);
-                int quantity = Integer.parseInt(row[2]);
-                long price = Long.parseLong(row[3]);
-                int age = Integer.parseInt(row[4]);
-                DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                LocalDate date = LocalDate.parse(row[5], dFormatter);
+        DefaultTableModel tempModel = new DefaultTableModel();
+        tempModel.setColumnIdentifiers(
+            new String[] { "ID", "Giống Lợn", "Số Lượng", "Giá", "Ngày Tuổi", "Ngày Nhập", "Tiêm Chủng" });
 
+        Vector<Vector> rows = dModel.getDataVector();
+        for (Vector<String> row : rows) {
+            // parse
+            try {
                 DecimalFormatSymbols dSymbols = new DecimalFormatSymbols();
                 dSymbols.setGroupingSeparator('.');
                 DecimalFormat dFormat = new DecimalFormat("#,###");
                 dFormat.setDecimalFormatSymbols(dSymbols);
 
-                if (id >= idf && id <= idt && (type.equals("") || row[1].equals(type))
-                        && quantity >= quantityf && quantity <= quantityt
-                        && price >= pricef && price <= pricet
-                        && age >= agef && age <= aget
-                        && (date.isAfter(datef) || date.isEqual(datef))
-                        && (date.isBefore(datet) || date.isEqual(datet))
-                        && (vaccine.equals("") || row[6].equals(vaccine)))
-                    dModel.addRow(
-                            new Object[] { row[0], row[1], row[2], dFormat.format(price), row[4], row[5], row[6] });
+                int id = Integer.parseInt(row.get(0).toString());
+                int quantity = Integer.parseInt(row.get(2).toString());
+                String str = row.get(3).toString().replace(".", "");
+                long price = Long.parseLong(str);
+                int age = Integer.parseInt(row.get(4).toString());
+                DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                LocalDate date = LocalDate.parse(row.get(5).toString(), dFormatter);
+    
+                if (id >= idf && id <= idt && (type.equals("") || row.get(1).equals(type))
+                && quantity >= quantityf && quantity <= quantityt
+                && price >= pricef && price <= pricet
+                && age >= agef && age <= aget
+                && (date.isAfter(datef) || date.isEqual(datef))
+                && (date.isBefore(datet) || date.isEqual(datet))
+                && (vaccine.equals("") || row.get(6).equals(vaccine)))
+                tempModel.addRow(
+                        new Object[] { row.get(0), row.get(1), row.get(2), dFormat.format(price), row.get(4), row.get(5), row.get(6) });
+            } catch (NumberFormatException nfe) {
+                nfe.printStackTrace();
             }
-        } catch (FileNotFoundException fnfe) {
-            fnfe.getStackTrace();
-        } catch (IOException ioe) {
-            ioe.getStackTrace();
-        }
+           
+        }  
+        return tempModel;
     }
+    
 
     // filter or
-    public void filterOr(String idF, String idT, String type, String quantityF, String quantityT,
+    public DefaultTableModel filterOr(String idF, String idT, String type, String quantityF, String quantityT,
             String priceF, String priceT, String ageF, String ageT, String dateF, String dateT, String vaccine)
             throws InputMismatchException {
 
         // parse
-        int idf = parse(idF, Integer.MIN_VALUE);
-        int idt = parse(idT, Integer.MAX_VALUE);
-        int quantityf = parse(quantityF, Integer.MIN_VALUE);
-        int quantityt = parse(quantityT, Integer.MAX_VALUE);
-        Long pricef = parse(priceF, Long.MIN_VALUE);
-        Long pricet = parse(priceT, Long.MAX_VALUE);
-        int agef = parse(ageF, Integer.MIN_VALUE);
-        int aget = parse(ageT, Integer.MAX_VALUE);
-        LocalDate datef = parse(dateF, LocalDate.MIN);
-        LocalDate datet = parse(dateT, LocalDate.MAX);
+        int idf = parse(idF, Integer.MAX_VALUE);
+        int idt = parse(idT, Integer.MIN_VALUE);
+        int quantityf = parse(quantityF, Integer.MAX_VALUE);
+        int quantityt = parse(quantityT, Integer.MIN_VALUE);
+        Long pricef = parse(priceF, Long.MAX_VALUE);
+        Long pricet = parse(priceT, Long.MIN_VALUE);
+        int agef = parse(ageF, Integer.MAX_VALUE);
+        int aget = parse(ageT, Integer.MIN_VALUE);
+        LocalDate datef = parse(dateF, LocalDate.MAX);
+        LocalDate datet = parse(dateT, LocalDate.MIN);
 
-        dModel = new DefaultTableModel();
-        dModel.setColumnIdentifiers(
-                new String[] { "ID", "Giống Lợn", "Số Lượng", "Giá", "Ngày Tuổi", "Ngày Nhập", "Tiêm Chủng" });
-        try (BufferedReader bReader = new BufferedReader(new FileReader(new File("src/resources/stockup.txt")))) {
-            String line;
-            while ((line = bReader.readLine()) != null) {
-                // parse
-                String[] row = line.split(";");
-                int id = Integer.parseInt(row[0]);
-                int quantity = Integer.parseInt(row[2]);
-                long price = Long.parseLong(row[3]);
-                int age = Integer.parseInt(row[4]);
-                DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                LocalDate date = LocalDate.parse(row[5], dFormatter);
+        DefaultTableModel tempModel = new DefaultTableModel();
+        tempModel.setColumnIdentifiers(
+            new String[] { "ID", "Giống Lợn", "Số Lượng", "Giá", "Ngày Tuổi", "Ngày Nhập", "Tiêm Chủng" });
 
+        Vector<Vector> rows = dModel.getDataVector();
+        for (Vector<String> row : rows) {
+            // parse
+            try {
                 DecimalFormatSymbols dSymbols = new DecimalFormatSymbols();
                 dSymbols.setGroupingSeparator('.');
                 DecimalFormat dFormat = new DecimalFormat("#,###");
                 dFormat.setDecimalFormatSymbols(dSymbols);
 
-                if (id >= idf && id <= idt || (type.equals("") || row[1].equals(type))
-                        || quantity >= quantityf && quantity <= quantityt
-                        || price >= pricef && price <= pricet
-                        || age >= agef && age <= aget
-                        || (date.isAfter(datef) || date.isEqual(datef))
-                        || (date.isBefore(datet) || date.isEqual(datet))
-                        || (vaccine.equals("") || row[6].equals(vaccine)))
-                    dModel.addRow(
-                            new Object[] { row[0], row[1], row[2], dFormat.format(price), row[4], row[5], row[6] });
+                int id = Integer.parseInt(row.get(0).toString());
+                int quantity = Integer.parseInt(row.get(2).toString());
+                String str = row.get(3).toString().replace(".", "");
+                long price = Long.parseLong(str);
+                int age = Integer.parseInt(row.get(4).toString());
+                DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                LocalDate date = LocalDate.parse(row.get(5).toString(), dFormatter);
+    
+                if ((id >= idf && id <= idt) 
+                || (!type.equals("") && row.get(1).equals(type))
+                || (quantity >= quantityf && quantity <= quantityt)
+                || (price >= pricef && price <= pricet)
+                || (age >= agef && age <= aget)
+                || ((date.isAfter(datef) || date.isEqual(datef)) && (date.isBefore(datet) || date.isEqual(datet)))
+                || (!vaccine.equals("") && row.get(6).equals(vaccine)))
+                tempModel.addRow(
+                        new Object[] { row.get(0), row.get(1), row.get(2), dFormat.format(price), row.get(4), row.get(5), row.get(6) });
+            } catch (NumberFormatException nfe) {
+                nfe.printStackTrace();
             }
-        } catch (FileNotFoundException fnfe) {
-            fnfe.getStackTrace();
-        } catch (IOException ioe) {
-            ioe.getStackTrace();
-        }
+           
+        }  
+        return tempModel;
     }
 
     private int parse(String input, int defaultValue) {
