@@ -29,7 +29,6 @@ import model.order.StockupOrder;
 public class StockupManager {
     private List<StockupOrder> list;
     private DefaultTableModel dModel;
-    private TableRowSorter<DefaultTableModel> tSorter;
 
     public StockupManager() {
         input();
@@ -41,10 +40,6 @@ public class StockupManager {
 
     public List<StockupOrder> getList() {
         return list;
-    }
-
-    public TableRowSorter<DefaultTableModel> gettSorter() {
-        return tSorter;
     }
 
     public void input() {
@@ -70,7 +65,6 @@ public class StockupManager {
         } catch (DateTimeException dte) {
             dte.getStackTrace();
         }
-        // tSorter = new TableRowSorter<>(dModel);
     }
 
     public void initTable(JTable jTable) {
@@ -88,10 +82,32 @@ public class StockupManager {
     // search
     public void search(String query) throws InputMismatchException {
         if (query.equals("")) {
-            tSorter.setRowFilter(null);
-            throw new InputMismatchException("Please enter a valid search keyword!");
+            input();
+            throw new InputMismatchException("Please enter text in the search box!");
         }
-        tSorter.setRowFilter(RowFilter.regexFilter("(?i)" + query));
+        else
+            dModel = new DefaultTableModel();
+            dModel.setColumnIdentifiers(
+                new String[] { "ID", "Giống Lợn", "Số Lượng", "Giá", "Ngày Tuổi", "Ngày Nhập", "Tiêm Chủng" });
+                try (BufferedReader bReader = new BufferedReader(new FileReader(new File("src/resources/stockup.txt")))) {
+                    String line;
+                    DecimalFormatSymbols dSymbols = new DecimalFormatSymbols();
+                    dSymbols.setGroupingSeparator('.');
+                    DecimalFormat dFormat = new DecimalFormat("#,###");
+                    dFormat.setDecimalFormatSymbols(dSymbols);
+                    while ((line = bReader.readLine()) != null) {
+                        if (line.toLowerCase().contains(query.toLowerCase())) {
+                            String[] row = line.split(";");
+                            dModel.addRow(
+                                new Object[] { row[0], row[1], row[2], dFormat.format(Long.parseLong(row[3])), row[4], row[5], row[6] });
+                        }
+                        
+                    }
+                } catch (FileNotFoundException fnfe) {
+                    fnfe.getStackTrace();
+                } catch (IOException ioe) {
+                    ioe.getStackTrace();
+                }
     }
 
     // filter and

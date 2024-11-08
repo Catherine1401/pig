@@ -507,6 +507,7 @@ public class AdminView extends JFrame {
     public void search() {
         try {
             sManager.search(jFieldSearchStockup.getText());
+            jTableStockup.setModel(sManager.getdModel());
         } catch (InputMismatchException ime) {
             jTableStockup.setModel(sManager.getdModel());
             JOptionPane.showMessageDialog(null, ime.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
