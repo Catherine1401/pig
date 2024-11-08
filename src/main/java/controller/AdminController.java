@@ -19,6 +19,7 @@ public class AdminController implements ActionListener {
             case "Exit" -> view.exit();
             case "Stock Up" -> view.menuStockup();
             case "Customer" -> view.menuCustomer();
+            case "Sort" -> view.sort();
             case "Search" -> view.search();
             case "Filter" -> view.filter();
         }

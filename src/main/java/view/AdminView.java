@@ -35,10 +35,11 @@ public class AdminView extends JFrame {
     private JMenuItem jItemStockup;
     private JMenuItem jItemCustomer;
     private JTextField jFieldSearchStockup;
+    private JComboBox<String> property;
+    private JComboBox<String> sortType;
     private JTextField jFieldIdFromStockup;
     private JTextField jFieldIdToStockup;
     private JComboBox<String> jBoxTypeFromStockup;
-    private JComboBox<String> jBoxTypeToStockup;
     private JTextField jFieldQuantityFromStockup;
     private JTextField jFieldQuantityToStockup;
     private JTextField jFieldPriceFromStockup;
@@ -157,11 +158,11 @@ public class AdminView extends JFrame {
         // ++ add search field ++
         jFieldSearchStockup = new JTextField();
         jFieldSearchStockup.setFont(fontPlain);
-        jFieldSearchStockup.setPreferredSize(new Dimension(750, 30));
+        jFieldSearchStockup.setPreferredSize(new Dimension(380, 30));
         jFieldSearchStockup.setHorizontalAlignment(SwingConstants.CENTER);
         gbc.gridx = 0;
         gbc.gridy = 0;
-        Insets insets = new Insets(0, 0, 0, 30);
+        Insets insets = new Insets(0, 0, 0, 10);
         gbc.insets = insets;
         jPanelSearch.add(jFieldSearchStockup, gbc);
 
@@ -169,8 +170,32 @@ public class AdminView extends JFrame {
         JButton jButtonSearch = new JButton("Search");
         jButtonSearch.setFont(fontBold);
         gbc.gridx = 1;
+        insets.set(0, 0, 0, 30);
         jButtonSearch.addActionListener(aListener);
         jPanelSearch.add(jButtonSearch, gbc);
+
+        // ++ add property field ++
+        property = new JComboBox<>(new String[] {"ID", "Số Lượng", "Giá", "Ngày Tuổi", "Ngày Nhập"});
+        property.setFont(fontPlain);
+        gbc.gridx = 2;
+        insets.set(0, 0, 0, 5);
+        jPanelSearch.add(property, gbc);
+
+        // ++ add sortType ++
+        sortType = new JComboBox<>(new String[] {"Ascending", "Descending"});
+        sortType.setFont(fontPlain);
+        gbc.gridx = 3;
+        insets.set(0, 0, 0, 10);
+        jPanelSearch.add(sortType, gbc);
+
+        // ++ add sort button ++
+        JButton jButtonSort = new JButton("Sort");
+        jButtonSort.setFont(fontBold);
+        jButtonSort.addActionListener(aListener);
+        gbc.gridx = 4;
+        jPanelSearch.add(jButtonSort, gbc);
+
+
 
         // --- add filter tool ---
         JPanel jPanelFilter = new JPanel(new GridBagLayout());
@@ -511,6 +536,8 @@ public class AdminView extends JFrame {
         } catch (InputMismatchException ime) {
             jTableStockup.setModel(sManager.getdModel());
             JOptionPane.showMessageDialog(null, ime.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            sManager.initTable(jTableStockup);
         }
     }
 
@@ -527,6 +554,7 @@ public class AdminView extends JFrame {
                 jFieldPriceToStockup.getText(), jFieldAgeFromStockup.getText(), 
                 jFieldAgeToStockup.getText(), jFieldDateFromStockup.getText(), 
                 jFieldDateToStockup.getText(), vaccine));;
+                sManager.initTable(jTableStockup);
             } catch (InputMismatchException ime) {
                 JOptionPane.showMessageDialog(null, ime.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
             }
@@ -540,9 +568,36 @@ public class AdminView extends JFrame {
                 jFieldPriceToStockup.getText(), jFieldAgeFromStockup.getText(), 
                 jFieldAgeToStockup.getText(), jFieldDateFromStockup.getText(), 
                 jFieldDateToStockup.getText(), vaccine));
+                sManager.initTable(jTableStockup);
             } catch (InputMismatchException ime) {
                 JOptionPane.showMessageDialog(null, ime.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
             }
         }
+    }
+
+    public void sort() {
+        String pro = property.getSelectedItem().toString();
+        String type = sortType.getSelectedItem().toString();
+        if (pro.equals("ID") && type.equals("Ascending"))
+            jTableStockup.setModel(sManager.sortIdAs());
+        else if (pro.equals("ID") && type.equals("Descending"))
+            jTableStockup.setModel(sManager.sortIdDe());
+        else if (pro.equals("Số Lượng") && type.equals("Ascending"))
+            jTableStockup.setModel(sManager.sortQuantityAs());
+        else if (pro.equals("Số Lượng") && type.equals("Descending"))
+            jTableStockup.setModel(sManager.sortQuantityDe());
+        else if (pro.equals("Giá") && type.equals("Ascending"))
+            jTableStockup.setModel(sManager.sortPriceAs());
+        else if (pro.equals("Giá") && type.equals("Descending"))
+            jTableStockup.setModel(sManager.sortPriceDe());
+        else if (pro.equals("Ngày Tuổi") && type.equals("Ascending"))
+            jTableStockup.setModel(sManager.sortAgeAs());
+        else if (pro.equals("Ngày Tuổi") && type.equals("Descending"))
+            jTableStockup.setModel(sManager.sortAgeDe());
+        else if (pro.equals("Ngày Nhập") && type.equals("Ascending"))
+            jTableStockup.setModel(sManager.sortDateAs());
+        else if (pro.equals("Ngày Nhập") && type.equals("Descending"))
+            jTableStockup.setModel(sManager.sortDateDe());
+        sManager.initTable(jTableStockup);
     }
 }

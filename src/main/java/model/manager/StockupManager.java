@@ -16,6 +16,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Vector;
@@ -221,6 +223,397 @@ public class StockupManager {
         }  
         return tempModel;
     }
+
+    // sort id ascending
+    public DefaultTableModel sortIdAs() {
+        DefaultTableModel tempModel = new DefaultTableModel();
+        list = new ArrayList<>();
+        tempModel.setColumnIdentifiers(
+            new String[] { "ID", "Giống Lợn", "Số Lượng", "Giá", "Ngày Tuổi", "Ngày Nhập", "Tiêm Chủng" });
+        
+        DecimalFormatSymbols dSymbols = new DecimalFormatSymbols();
+        dSymbols.setGroupingSeparator('.');
+        DecimalFormat dFormat = new DecimalFormat("#,###");
+        dFormat.setDecimalFormatSymbols(dSymbols);
+
+        Vector<Vector> rows = dModel.getDataVector();
+        for (Vector<String> row : rows) {
+            int id = Integer.parseInt(row.get(0).toString());
+            String pigBread = row.get(1);
+            int quantity = Integer.parseInt(row.get(2).toString());
+            String str = row.get(3).toString().replace(".", "");
+            long price = Long.parseLong(str);
+            int age = Integer.parseInt(row.get(4).toString());
+            DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate date = LocalDate.parse(row.get(5).toString(), dFormatter);
+            boolean vaccine = Boolean.parseBoolean(row.get(6));
+            list.add(new StockupOrder(id, pigBread, quantity, price, age, date, vaccine));
+        }
+
+        Collections.sort(list, new Comparator<StockupOrder>() {
+            @Override
+            public int compare(StockupOrder s1, StockupOrder s2) {
+                return Integer.compare(s1.getId(), s2.getId());
+            }
+        });
+
+        for (StockupOrder s : list) {
+            tempModel.addRow( new Object[] { s.getId(), s.getType(), s.getQuantity(), dFormat.format(s.getPrice()), s.getAge(), s.getDate(), s.isVaccineStatus() });
+        }
+        return tempModel;
+    }
+
+    // sort id descending
+    public DefaultTableModel sortIdDe() {
+        DefaultTableModel tempModel = new DefaultTableModel();
+        list = new ArrayList<>();
+        tempModel.setColumnIdentifiers(
+            new String[] { "ID", "Giống Lợn", "Số Lượng", "Giá", "Ngày Tuổi", "Ngày Nhập", "Tiêm Chủng" });
+        
+        DecimalFormatSymbols dSymbols = new DecimalFormatSymbols();
+        dSymbols.setGroupingSeparator('.');
+        DecimalFormat dFormat = new DecimalFormat("#,###");
+        dFormat.setDecimalFormatSymbols(dSymbols);
+
+        Vector<Vector> rows = dModel.getDataVector();
+        for (Vector<String> row : rows) {
+            int id = Integer.parseInt(row.get(0).toString());
+            String pigBread = row.get(1);
+            int quantity = Integer.parseInt(row.get(2).toString());
+            String str = row.get(3).toString().replace(".", "");
+            long price = Long.parseLong(str);
+            int age = Integer.parseInt(row.get(4).toString());
+            DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate date = LocalDate.parse(row.get(5).toString(), dFormatter);
+            boolean vaccine = Boolean.parseBoolean(row.get(6));
+            list.add(new StockupOrder(id, pigBread, quantity, price, age, date, vaccine));
+        }
+
+        Collections.sort(list, new Comparator<StockupOrder>() {
+            @Override
+            public int compare(StockupOrder s1, StockupOrder s2) {
+                return Integer.compare(s2.getId(), s1.getId());
+            }
+        });
+
+        for (StockupOrder s : list) {
+            tempModel.addRow( new Object[] { s.getId(), s.getType(), s.getQuantity(), dFormat.format(s.getPrice()), s.getAge(), s.getDate(), s.isVaccineStatus() });
+        }
+        return tempModel;
+    }
+
+    // sort quantity ascending
+    public DefaultTableModel sortQuantityAs() {
+        DefaultTableModel tempModel = new DefaultTableModel();
+        list = new ArrayList<>();
+        tempModel.setColumnIdentifiers(
+            new String[] { "ID", "Giống Lợn", "Số Lượng", "Giá", "Ngày Tuổi", "Ngày Nhập", "Tiêm Chủng" });
+        
+        DecimalFormatSymbols dSymbols = new DecimalFormatSymbols();
+        dSymbols.setGroupingSeparator('.');
+        DecimalFormat dFormat = new DecimalFormat("#,###");
+        dFormat.setDecimalFormatSymbols(dSymbols);
+
+        Vector<Vector> rows = dModel.getDataVector();
+        for (Vector<String> row : rows) {
+            int id = Integer.parseInt(row.get(0).toString());
+            String pigBread = row.get(1);
+            int quantity = Integer.parseInt(row.get(2).toString());
+            String str = row.get(3).toString().replace(".", "");
+            long price = Long.parseLong(str);
+            int age = Integer.parseInt(row.get(4).toString());
+            DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate date = LocalDate.parse(row.get(5).toString(), dFormatter);
+            boolean vaccine = Boolean.parseBoolean(row.get(6));
+            list.add(new StockupOrder(id, pigBread, quantity, price, age, date, vaccine));
+        }
+
+        Collections.sort(list, new Comparator<StockupOrder>() {
+            @Override
+            public int compare(StockupOrder s1, StockupOrder s2) {
+                return Integer.compare(s1.getQuantity(), s2.getQuantity());
+            }
+        });
+
+        for (StockupOrder s : list) {
+            tempModel.addRow( new Object[] { s.getId(), s.getType(), s.getQuantity(), dFormat.format(s.getPrice()), s.getAge(), s.getDate(), s.isVaccineStatus() });
+        }
+        return tempModel;
+    }
+
+    // sort quantity descending
+    public DefaultTableModel sortQuantityDe() {
+        DefaultTableModel tempModel = new DefaultTableModel();
+        list = new ArrayList<>();
+        tempModel.setColumnIdentifiers(
+            new String[] { "ID", "Giống Lợn", "Số Lượng", "Giá", "Ngày Tuổi", "Ngày Nhập", "Tiêm Chủng" });
+        
+        DecimalFormatSymbols dSymbols = new DecimalFormatSymbols();
+        dSymbols.setGroupingSeparator('.');
+        DecimalFormat dFormat = new DecimalFormat("#,###");
+        dFormat.setDecimalFormatSymbols(dSymbols);
+
+        Vector<Vector> rows = dModel.getDataVector();
+        for (Vector<String> row : rows) {
+            int id = Integer.parseInt(row.get(0).toString());
+            String pigBread = row.get(1);
+            int quantity = Integer.parseInt(row.get(2).toString());
+            String str = row.get(3).toString().replace(".", "");
+            long price = Long.parseLong(str);
+            int age = Integer.parseInt(row.get(4).toString());
+            DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate date = LocalDate.parse(row.get(5).toString(), dFormatter);
+            boolean vaccine = Boolean.parseBoolean(row.get(6));
+            list.add(new StockupOrder(id, pigBread, quantity, price, age, date, vaccine));
+        }
+
+        Collections.sort(list, new Comparator<StockupOrder>() {
+            @Override
+            public int compare(StockupOrder s1, StockupOrder s2) {
+                return Integer.compare(s2.getQuantity(), s1.getQuantity());
+            }
+        });
+
+        for (StockupOrder s : list) {
+            tempModel.addRow( new Object[] { s.getId(), s.getType(), s.getQuantity(), dFormat.format(s.getPrice()), s.getAge(), s.getDate(), s.isVaccineStatus() });
+        }
+        return tempModel;
+    }
+
+    // sort price ascending
+    public DefaultTableModel sortPriceAs() {
+        DefaultTableModel tempModel = new DefaultTableModel();
+        list = new ArrayList<>();
+        tempModel.setColumnIdentifiers(
+            new String[] { "ID", "Giống Lợn", "Số Lượng", "Giá", "Ngày Tuổi", "Ngày Nhập", "Tiêm Chủng" });
+        
+        DecimalFormatSymbols dSymbols = new DecimalFormatSymbols();
+        dSymbols.setGroupingSeparator('.');
+        DecimalFormat dFormat = new DecimalFormat("#,###");
+        dFormat.setDecimalFormatSymbols(dSymbols);
+
+        Vector<Vector> rows = dModel.getDataVector();
+        for (Vector<String> row : rows) {
+            int id = Integer.parseInt(row.get(0).toString());
+            String pigBread = row.get(1);
+            int quantity = Integer.parseInt(row.get(2).toString());
+            String str = row.get(3).toString().replace(".", "");
+            long price = Long.parseLong(str);
+            int age = Integer.parseInt(row.get(4).toString());
+            DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate date = LocalDate.parse(row.get(5).toString(), dFormatter);
+            boolean vaccine = Boolean.parseBoolean(row.get(6));
+            list.add(new StockupOrder(id, pigBread, quantity, price, age, date, vaccine));
+        }
+
+        Collections.sort(list, new Comparator<StockupOrder>() {
+            @Override
+            public int compare(StockupOrder s1, StockupOrder s2) {
+                return Long.compare(s1.getPrice(), s2.getPrice());
+            }
+        });
+
+        for (StockupOrder s : list) {
+            tempModel.addRow( new Object[] { s.getId(), s.getType(), s.getQuantity(), dFormat.format(s.getPrice()), s.getAge(), s.getDate(), s.isVaccineStatus() });
+        }
+        return tempModel;
+    }
+
+    // sort price descending
+    public DefaultTableModel sortPriceDe() {
+        DefaultTableModel tempModel = new DefaultTableModel();
+        list = new ArrayList<>();
+        tempModel.setColumnIdentifiers(
+            new String[] { "ID", "Giống Lợn", "Số Lượng", "Giá", "Ngày Tuổi", "Ngày Nhập", "Tiêm Chủng" });
+        
+        DecimalFormatSymbols dSymbols = new DecimalFormatSymbols();
+        dSymbols.setGroupingSeparator('.');
+        DecimalFormat dFormat = new DecimalFormat("#,###");
+        dFormat.setDecimalFormatSymbols(dSymbols);
+
+        Vector<Vector> rows = dModel.getDataVector();
+        for (Vector<String> row : rows) {
+            int id = Integer.parseInt(row.get(0).toString());
+            String pigBread = row.get(1);
+            int quantity = Integer.parseInt(row.get(2).toString());
+            String str = row.get(3).toString().replace(".", "");
+            long price = Long.parseLong(str);
+            int age = Integer.parseInt(row.get(4).toString());
+            DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate date = LocalDate.parse(row.get(5).toString(), dFormatter);
+            boolean vaccine = Boolean.parseBoolean(row.get(6));
+            list.add(new StockupOrder(id, pigBread, quantity, price, age, date, vaccine));
+        }
+
+        Collections.sort(list, new Comparator<StockupOrder>() {
+            @Override
+            public int compare(StockupOrder s1, StockupOrder s2) {
+                return Long.compare(s2.getPrice(), s1.getPrice());
+            }
+        });
+
+        for (StockupOrder s : list) {
+            tempModel.addRow( new Object[] { s.getId(), s.getType(), s.getQuantity(), dFormat.format(s.getPrice()), s.getAge(), s.getDate(), s.isVaccineStatus() });
+        }
+        return tempModel;
+    }
+
+    // sort age ascending
+    public DefaultTableModel sortAgeAs() {
+        DefaultTableModel tempModel = new DefaultTableModel();
+        list = new ArrayList<>();
+        tempModel.setColumnIdentifiers(
+            new String[] { "ID", "Giống Lợn", "Số Lượng", "Giá", "Ngày Tuổi", "Ngày Nhập", "Tiêm Chủng" });
+        
+        DecimalFormatSymbols dSymbols = new DecimalFormatSymbols();
+        dSymbols.setGroupingSeparator('.');
+        DecimalFormat dFormat = new DecimalFormat("#,###");
+        dFormat.setDecimalFormatSymbols(dSymbols);
+
+        Vector<Vector> rows = dModel.getDataVector();
+        for (Vector<String> row : rows) {
+            int id = Integer.parseInt(row.get(0).toString());
+            String pigBread = row.get(1);
+            int quantity = Integer.parseInt(row.get(2).toString());
+            String str = row.get(3).toString().replace(".", "");
+            long price = Long.parseLong(str);
+            int age = Integer.parseInt(row.get(4).toString());
+            DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate date = LocalDate.parse(row.get(5).toString(), dFormatter);
+            boolean vaccine = Boolean.parseBoolean(row.get(6));
+            list.add(new StockupOrder(id, pigBread, quantity, price, age, date, vaccine));
+        }
+
+        Collections.sort(list, new Comparator<StockupOrder>() {
+            @Override
+            public int compare(StockupOrder s1, StockupOrder s2) {
+                return Long.compare(s1.getAge(), s2.getAge());
+            }
+        });
+
+        for (StockupOrder s : list) {
+            tempModel.addRow( new Object[] { s.getId(), s.getType(), s.getQuantity(), dFormat.format(s.getPrice()), s.getAge(), s.getDate(), s.isVaccineStatus() });
+        }
+        return tempModel;
+    }
+
+    // sort age descending
+    public DefaultTableModel sortAgeDe() {
+        DefaultTableModel tempModel = new DefaultTableModel();
+        list = new ArrayList<>();
+        tempModel.setColumnIdentifiers(
+            new String[] { "ID", "Giống Lợn", "Số Lượng", "Giá", "Ngày Tuổi", "Ngày Nhập", "Tiêm Chủng" });
+        
+        DecimalFormatSymbols dSymbols = new DecimalFormatSymbols();
+        dSymbols.setGroupingSeparator('.');
+        DecimalFormat dFormat = new DecimalFormat("#,###");
+        dFormat.setDecimalFormatSymbols(dSymbols);
+
+        Vector<Vector> rows = dModel.getDataVector();
+        for (Vector<String> row : rows) {
+            int id = Integer.parseInt(row.get(0).toString());
+            String pigBread = row.get(1);
+            int quantity = Integer.parseInt(row.get(2).toString());
+            String str = row.get(3).toString().replace(".", "");
+            long price = Long.parseLong(str);
+            int age = Integer.parseInt(row.get(4).toString());
+            DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate date = LocalDate.parse(row.get(5).toString(), dFormatter);
+            boolean vaccine = Boolean.parseBoolean(row.get(6));
+            list.add(new StockupOrder(id, pigBread, quantity, price, age, date, vaccine));
+        }
+
+        Collections.sort(list, new Comparator<StockupOrder>() {
+            @Override
+            public int compare(StockupOrder s1, StockupOrder s2) {
+                return Long.compare(s2.getAge(), s1.getAge());
+            }
+        });
+
+        for (StockupOrder s : list) {
+            tempModel.addRow( new Object[] { s.getId(), s.getType(), s.getQuantity(), dFormat.format(s.getPrice()), s.getAge(), s.getDate(), s.isVaccineStatus() });
+        }
+        return tempModel;
+    }
+
+    // sort date ascending
+    public DefaultTableModel sortDateAs() {
+        DefaultTableModel tempModel = new DefaultTableModel();
+        list = new ArrayList<>();
+        tempModel.setColumnIdentifiers(
+            new String[] { "ID", "Giống Lợn", "Số Lượng", "Giá", "Ngày Tuổi", "Ngày Nhập", "Tiêm Chủng" });
+        
+        DecimalFormatSymbols dSymbols = new DecimalFormatSymbols();
+        dSymbols.setGroupingSeparator('.');
+        DecimalFormat dFormat = new DecimalFormat("#,###");
+        dFormat.setDecimalFormatSymbols(dSymbols);
+
+        Vector<Vector> rows = dModel.getDataVector();
+        for (Vector<String> row : rows) {
+            int id = Integer.parseInt(row.get(0).toString());
+            String pigBread = row.get(1);
+            int quantity = Integer.parseInt(row.get(2).toString());
+            String str = row.get(3).toString().replace(".", "");
+            long price = Long.parseLong(str);
+            int age = Integer.parseInt(row.get(4).toString());
+            DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate date = LocalDate.parse(row.get(5).toString(), dFormatter);
+            boolean vaccine = Boolean.parseBoolean(row.get(6));
+            list.add(new StockupOrder(id, pigBread, quantity, price, age, date, vaccine));
+        }
+
+        Collections.sort(list, new Comparator<StockupOrder>() {
+            @Override
+            public int compare(StockupOrder s1, StockupOrder s2) {
+                return s1.getDate().compareTo(s2.getDate());
+            }
+        });
+
+        for (StockupOrder s : list) {
+            tempModel.addRow( new Object[] { s.getId(), s.getType(), s.getQuantity(), dFormat.format(s.getPrice()), s.getAge(), s.getDate(), s.isVaccineStatus() });
+        }
+        return tempModel;
+    }
+
+    // sỏt date descending
+    public DefaultTableModel sortDateDe() {
+        DefaultTableModel tempModel = new DefaultTableModel();
+        list = new ArrayList<>();
+        tempModel.setColumnIdentifiers(
+            new String[] { "ID", "Giống Lợn", "Số Lượng", "Giá", "Ngày Tuổi", "Ngày Nhập", "Tiêm Chủng" });
+        
+        DecimalFormatSymbols dSymbols = new DecimalFormatSymbols();
+        dSymbols.setGroupingSeparator('.');
+        DecimalFormat dFormat = new DecimalFormat("#,###");
+        dFormat.setDecimalFormatSymbols(dSymbols);
+
+        Vector<Vector> rows = dModel.getDataVector();
+        for (Vector<String> row : rows) {
+            int id = Integer.parseInt(row.get(0).toString());
+            String pigBread = row.get(1);
+            int quantity = Integer.parseInt(row.get(2).toString());
+            String str = row.get(3).toString().replace(".", "");
+            long price = Long.parseLong(str);
+            int age = Integer.parseInt(row.get(4).toString());
+            DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate date = LocalDate.parse(row.get(5).toString(), dFormatter);
+            boolean vaccine = Boolean.parseBoolean(row.get(6));
+            list.add(new StockupOrder(id, pigBread, quantity, price, age, date, vaccine));
+        }
+
+        Collections.sort(list, new Comparator<StockupOrder>() {
+            @Override
+            public int compare(StockupOrder s1, StockupOrder s2) {
+                return s2.getDate().compareTo(s1.getDate());
+            }
+        });
+
+        for (StockupOrder s : list) {
+            tempModel.addRow( new Object[] { s.getId(), s.getType(), s.getQuantity(), dFormat.format(s.getPrice()), s.getAge(), s.getDate(), s.isVaccineStatus() });
+        }
+        return tempModel;
+    }
+
 
     private int parse(String input, int defaultValue) {
         try {
