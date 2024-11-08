@@ -8,6 +8,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.util.InputMismatchException;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -148,6 +149,7 @@ public class AdminView extends JFrame {
         GridBagConstraints gbc = new GridBagConstraints();
         Font fontPlain = new Font("Roboto", Font.PLAIN, 15);
         Font fontBold = new Font("Roboto", Font.BOLD, 15);
+        ActionListener aListener = new AdminController(this);
 
         // --- set search tool ---
         JPanel jPanelSearch = new JPanel(new GridBagLayout());
@@ -167,6 +169,7 @@ public class AdminView extends JFrame {
         JButton jButtonSearch = new JButton("Search");
         jButtonSearch.setFont(fontBold);
         gbc.gridx = 1;
+        jButtonSearch.addActionListener(aListener);
         jPanelSearch.add(jButtonSearch, gbc);
 
         // --- add filter tool ---
@@ -212,15 +215,6 @@ public class AdminView extends JFrame {
         gbc.gridx = 2;
         gbc.gridy = 0;
         jPanelFilter.add(jBoxTypeFromStockup, gbc);
-
-        jBoxTypeToStockup = new JComboBox<>(new String[] { "Móng Cái", "Ỉ", "Mán", "Sóc", "Cỏ", "Lũng Pù", "Vân Pa",
-        "Mường Khương", "Mẹo", "Táp Ná", "Yorkshire", "Landrace", "Pietrain", "Hampshire", "Berkshire",
-        "Cornwall", "Ba Xuyên", "Thuộc Nhiêu" });
-        jBoxTypeToStockup.setSelectedItem(null);
-        jBoxTypeToStockup.setFont(fontPlain);
-        jBoxTypeToStockup.setPreferredSize(new Dimension(150, 30));
-        gbc.gridy = 1;
-        jPanelFilter.add(jBoxTypeToStockup, gbc);
 
         // ++ add quantity field ++
         jFieldQuantityFromStockup = new JTextField();
@@ -279,7 +273,7 @@ public class AdminView extends JFrame {
         jPanelFilter.add(jFieldDateToStockup, gbc);
 
         // ++ add vaccine status filed ++
-        jBoxVaccineStockup = new JComboBox<>(new String[] {"true", "false"});
+        jBoxVaccineStockup = new JComboBox<>(new String[] { "true", "false" });
         jBoxVaccineStockup.setSelectedItem(null);
         jBoxVaccineStockup.setFont(fontPlain);
         jBoxVaccineStockup.setPreferredSize(new Dimension(80, 30));
@@ -290,7 +284,6 @@ public class AdminView extends JFrame {
 
         // ++ add option field ++
         jBoxOptionStock = new JComboBox<>(new String[] { "AND", "OR" });
-        jBoxOptionStock.setSelectedItem(null);
         jBoxOptionStock.setFont(fontBold);
         jBoxOptionStock.setPreferredSize(new Dimension(80, 30));
         gbc.gridx = 8;
@@ -301,16 +294,18 @@ public class AdminView extends JFrame {
         JButton jButtonFilter = new JButton("Filter");
         jButtonFilter.setFont(fontBold);
         gbc.gridy = 1;
+        jButtonFilter.addActionListener(aListener);
         jPanelFilter.add(jButtonFilter, gbc);
 
         // --- add table ---
         jTableStockup = new JTable(sManager.getdModel());
-        StockupManager.initTable(jTableStockup);
+        jTableStockup.setRowSorter(sManager.gettSorter());
+        sManager.initTable(jTableStockup);
         JPanel jPanelTable = new JPanel();
         jPanelTable.setLayout(null);
         jPanelTable.setPreferredSize(new Dimension(1000, 200));
         JScrollPane jPane = new JScrollPane(jTableStockup);
-        jPane.setBounds(89,0,720,200);
+        jPane.setBounds(89, 0, 720, 200);
         jPanelTable.add(jPane);
 
         // --- add info ---
@@ -340,9 +335,10 @@ public class AdminView extends JFrame {
         jPanelInfoLeftStockup.add(jLabelTypeStockup, gbc);
 
         jBoxTypeStockup = new JComboBox<>(new String[] { "Móng Cái", "Ỉ", "Mán", "Sóc", "Cỏ", "Lũng Pù", "Vân Pa",
-        "Mường Khương", "Mẹo", "Táp Ná", "Yorkshire", "Landrace", "Pietrain", "Hampshire", "Berkshire",
-        "Cornwall", "Ba Xuyên", "Thuộc Nhiêu" });
+                "Mường Khương", "Mẹo", "Táp Ná", "Yorkshire", "Landrace", "Pietrain", "Hampshire", "Berkshire",
+                "Cornwall", "Ba Xuyên", "Thuộc Nhiêu" });
         jBoxTypeStockup.setSelectedItem(null);
+        jBoxTypeStockup.setFont(fontPlain);
         jBoxTypeStockup.setPreferredSize(new Dimension(120, 30));
         gbc.gridx = 1;
         jPanelInfoLeftStockup.add(jBoxTypeStockup, gbc);
@@ -384,6 +380,7 @@ public class AdminView extends JFrame {
         jFieldAgeStockup.setFont(fontPlain);
         jFieldAgeStockup.setPreferredSize(new Dimension(120, 30));
         gbc.gridx = 1;
+        insets.set(0, 0, 10, 100);
         jPanelInfoRightStockup.add(jFieldAgeStockup, gbc);
 
         // ++ add date ++
@@ -391,12 +388,14 @@ public class AdminView extends JFrame {
         jLabelDateStockup.setFont(fontBold);
         gbc.gridx = 0;
         gbc.gridy = 1;
+        insets.set(0, 0, 10, 10);
         jPanelInfoRightStockup.add(jLabelDateStockup, gbc);
 
         jFieldDateStockup = new JTextField();
         jFieldDateStockup.setFont(fontPlain);
         jFieldDateStockup.setPreferredSize(new Dimension(120, 30));
         gbc.gridx = 1;
+        insets.set(0, 0, 10, 100);
         jPanelInfoRightStockup.add(jFieldDateStockup, gbc);
 
         // ++ add vaccine ++
@@ -404,37 +403,58 @@ public class AdminView extends JFrame {
         jLabelVaccineStockup.setFont(fontBold);
         gbc.gridx = 0;
         gbc.gridy = 2;
+        insets.set(0, 0, 10, 10);
         jPanelInfoRightStockup.add(jLabelVaccineStockup, gbc);
 
-        jBoxVaccineInfoStockup = new JComboBox<>(new String[] {"true", "false"});
+        jBoxVaccineInfoStockup = new JComboBox<>(new String[] { "true", "false" });
         jBoxVaccineInfoStockup.setSelectedItem(null);
         jBoxVaccineInfoStockup.setFont(fontPlain);
         jBoxVaccineInfoStockup.setPreferredSize(new Dimension(120, 30));
         gbc.gridx = 1;
+        insets.set(0, 0, 10, 100);
         jPanelInfoRightStockup.add(jBoxVaccineInfoStockup, gbc);
 
-        
         // ++ add all ++
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.insets = new Insets(0, 0, 15, 100);
+        insets.set(0, 0, 15, 100);
         jPanelInfoStockup.add(jPanelInfoLeftStockup, gbc);
         gbc.gridx = 1;
-        gbc.insets = new Insets(0, 0, 15, 0);
+        insets.set(0, 0, 15, 0);
         jPanelInfoStockup.add(jPanelInfoRightStockup, gbc);
 
+        // --- add button ---
+        JPanel jPanelButton = new JPanel(new GridBagLayout());
 
+        // ++ add add button ++
+        JButton jButtonAddStockup = new JButton("ADD");
+        jButtonAddStockup.setFont(fontBold);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        insets.set(0, 0, 0, 50);
+        jPanelButton.add(jButtonAddStockup, gbc);
 
+        // ++ add delete button ++
+        JButton jButtonDeleteStockup = new JButton("DELETE");
+        jButtonDeleteStockup.setFont(fontBold);
+        gbc.gridx = 1;
+        insets.set(0, 0, 0, 50);
+        jPanelButton.add(jButtonDeleteStockup, gbc);
 
+        // ++ add update button ++
+        JButton jButtonUpdateStockup = new JButton("UPDATE");
+        jButtonUpdateStockup.setFont(fontBold);
+        gbc.gridx = 2;
+        insets.set(0, 0, 0, 50);
+        jPanelButton.add(jButtonUpdateStockup, gbc);
 
+        // ++ add cancel button ++
+        JButton jButtonCancelStockup = new JButton("CANCEL");
+        jButtonCancelStockup.setFont(fontBold);
+        gbc.gridx = 3;
+        insets.set(0, 0, 0, 120);
+        jPanelButton.add(jButtonCancelStockup, gbc);
 
-
-
-
-
-
-
-        
         // --- add to stockup view ---
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -452,6 +472,9 @@ public class AdminView extends JFrame {
         gbc.gridy = 3;
         gbc.anchor = GridBagConstraints.CENTER;
         stockupView.add(jPanelInfoStockup, gbc);
+
+        gbc.gridy = 4;
+        stockupView.add(jPanelButton, gbc);
 
         return stockupView;
     }
@@ -479,5 +502,34 @@ public class AdminView extends JFrame {
         jItemCustomer.setEnabled(false);
         jItemStockup.setEnabled(true);
         System.out.println("customer");
+    }
+
+    public void search() {
+        try {
+            sManager.search(jFieldSearchStockup.getText());
+        } catch (InputMismatchException ime) {
+            JOptionPane.showMessageDialog(null, ime.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public void filter() {
+        String option = jBoxOptionStock.getSelectedItem().toString();
+        System.out.println("clm");
+        if (option.equals("AND")) {
+            try {
+                String type = jBoxTypeFromStockup.getSelectedItem() == null ? "" : jBoxTypeFromStockup.getSelectedItem().toString();
+                String vaccine = jBoxVaccineStockup.getSelectedItem() == null ? "" : jBoxVaccineStockup.getSelectedItem().toString();
+                sManager.filterAnd(jFieldIdFromStockup.getText(), jFieldIdToStockup.getText(), 
+                type, jFieldQuantityFromStockup.getText(), 
+                jFieldQuantityToStockup.getText(), jFieldPriceFromStockup.getText(), 
+                jFieldPriceToStockup.getText(), jFieldAgeFromStockup.getText(), 
+                jFieldAgeToStockup.getText(), jFieldDateFromStockup.getText(), 
+                jFieldDateToStockup.getText(), vaccine);
+            } catch (InputMismatchException ime) {
+                JOptionPane.showMessageDialog(null, ime.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+            }
+        } else if (option.equals("OR")) {
+
+        }
     }
 }

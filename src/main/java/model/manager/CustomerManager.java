@@ -18,7 +18,7 @@ public class CustomerManager {
     }
 
     public boolean checkLogin(String username, String password) throws InputMismatchException {
-        Checker.checker(username, password);
+        Checker.check(username, password);
         try (BufferedReader bReader = new BufferedReader(new FileReader(new File("src/resources/login.txt")))) {
             String line;
             while ((line = bReader.readLine()) != null) {
@@ -35,7 +35,7 @@ public class CustomerManager {
     }
 
     public boolean checkSignup(String username, String password) {
-        Checker.checker(username, password);
+        Checker.check(username, password);
         File info = new File("src/resources/login.txt");
         Map<String, String> list = new HashMap<>();
         try (BufferedReader bReader = new BufferedReader(new FileReader(info))) {
