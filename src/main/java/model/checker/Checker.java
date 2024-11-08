@@ -1,15 +1,9 @@
 package model.checker;
 
-import java.text.DateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Set;
 
 public class Checker {
     // check username
@@ -57,7 +51,7 @@ public class Checker {
             int clm = Integer.parseInt(quantity);
             if (clm <= 0 || clm > 10000)
                 throw new InputMismatchException(
-                        "The quantity must be greater than 0 and less than or equal to 10,000!");
+                        "The quantity must be greater than 0 and less than or equal to 10.000!");
         } catch (NumberFormatException nfe) {
             throw new InputMismatchException("Quantity must be a valid integer!");
         }
@@ -73,7 +67,7 @@ public class Checker {
     public static void checkPrice(String price) throws InputMismatchException {
         try {
             Long clm = Long.parseLong(price);
-            if (clm <= 0 || clm > 5000000)
+            if (clm <= 100000 || clm > 5000000)
                 throw new InputMismatchException(
                         "The price must be greater than 0 and less than or equal to 5.000.000!");
         } catch (NumberFormatException nfe) {

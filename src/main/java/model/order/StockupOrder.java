@@ -1,7 +1,6 @@
 package model.order;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public class StockupOrder {
     private int id, quantity, age;

@@ -8,6 +8,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseListener;
 import java.util.InputMismatchException;
 
 import javax.swing.JButton;
@@ -175,14 +176,14 @@ public class AdminView extends JFrame {
         jPanelSearch.add(jButtonSearch, gbc);
 
         // ++ add property field ++
-        property = new JComboBox<>(new String[] {"ID", "Số Lượng", "Giá", "Ngày Tuổi", "Ngày Nhập"});
+        property = new JComboBox<>(new String[] { "ID", "Số Lượng", "Giá", "Ngày Tuổi", "Ngày Nhập" });
         property.setFont(fontPlain);
         gbc.gridx = 2;
         insets.set(0, 0, 0, 5);
         jPanelSearch.add(property, gbc);
 
         // ++ add sortType ++
-        sortType = new JComboBox<>(new String[] {"Ascending", "Descending"});
+        sortType = new JComboBox<>(new String[] { "Ascending", "Descending" });
         sortType.setFont(fontPlain);
         gbc.gridx = 3;
         insets.set(0, 0, 0, 10);
@@ -194,8 +195,6 @@ public class AdminView extends JFrame {
         jButtonSort.addActionListener(aListener);
         gbc.gridx = 4;
         jPanelSearch.add(jButtonSort, gbc);
-
-
 
         // --- add filter tool ---
         JPanel jPanelFilter = new JPanel(new GridBagLayout());
@@ -326,6 +325,8 @@ public class AdminView extends JFrame {
         jTableStockup = new JTable(sManager.getdModel());
         // jTableStockup.setRowSorter(sManager.gettSorter());
         sManager.initTable(jTableStockup);
+        MouseListener mListener = new AdminController(this);
+        jTableStockup.addMouseListener(mListener);
         JPanel jPanelTable = new JPanel();
         jPanelTable.setLayout(null);
         jPanelTable.setPreferredSize(new Dimension(1000, 200));
@@ -454,6 +455,7 @@ public class AdminView extends JFrame {
         // ++ add add button ++
         JButton jButtonAddStockup = new JButton("ADD");
         jButtonAddStockup.setFont(fontBold);
+        jButtonAddStockup.addActionListener(aListener);
         gbc.gridx = 0;
         gbc.gridy = 0;
         insets.set(0, 0, 0, 50);
@@ -462,6 +464,7 @@ public class AdminView extends JFrame {
         // ++ add delete button ++
         JButton jButtonDeleteStockup = new JButton("DELETE");
         jButtonDeleteStockup.setFont(fontBold);
+        jButtonDeleteStockup.addActionListener(aListener);
         gbc.gridx = 1;
         insets.set(0, 0, 0, 50);
         jPanelButton.add(jButtonDeleteStockup, gbc);
@@ -469,6 +472,7 @@ public class AdminView extends JFrame {
         // ++ add update button ++
         JButton jButtonUpdateStockup = new JButton("UPDATE");
         jButtonUpdateStockup.setFont(fontBold);
+        jButtonUpdateStockup.addActionListener(aListener);
         gbc.gridx = 2;
         insets.set(0, 0, 0, 50);
         jPanelButton.add(jButtonUpdateStockup, gbc);
@@ -476,6 +480,7 @@ public class AdminView extends JFrame {
         // ++ add cancel button ++
         JButton jButtonCancelStockup = new JButton("CANCEL");
         jButtonCancelStockup.setFont(fontBold);
+        jButtonCancelStockup.addActionListener(aListener);
         gbc.gridx = 3;
         insets.set(0, 0, 0, 120);
         jPanelButton.add(jButtonCancelStockup, gbc);
@@ -543,31 +548,34 @@ public class AdminView extends JFrame {
 
     public void filter() {
         String option = jBoxOptionStock.getSelectedItem().toString();
-        System.out.println("clm");
         if (option.equals("AND")) {
             try {
-                String type = jBoxTypeFromStockup.getSelectedItem() == null ? "" : jBoxTypeFromStockup.getSelectedItem().toString();
-                String vaccine = jBoxVaccineStockup.getSelectedItem() == null ? "" : jBoxVaccineStockup.getSelectedItem().toString();
-                jTableStockup.setModel(sManager.filterAnd(jFieldIdFromStockup.getText(), jFieldIdToStockup.getText(), 
-                type, jFieldQuantityFromStockup.getText(), 
-                jFieldQuantityToStockup.getText(), jFieldPriceFromStockup.getText(), 
-                jFieldPriceToStockup.getText(), jFieldAgeFromStockup.getText(), 
-                jFieldAgeToStockup.getText(), jFieldDateFromStockup.getText(), 
-                jFieldDateToStockup.getText(), vaccine));;
+                String type = jBoxTypeFromStockup.getSelectedItem() == null ? ""
+                        : jBoxTypeFromStockup.getSelectedItem().toString();
+                String vaccine = jBoxVaccineStockup.getSelectedItem() == null ? ""
+                        : jBoxVaccineStockup.getSelectedItem().toString();
+                jTableStockup.setModel(sManager.filterAnd(jFieldIdFromStockup.getText(), jFieldIdToStockup.getText(),
+                        type, jFieldQuantityFromStockup.getText(), jFieldQuantityToStockup.getText(),
+                        jFieldPriceFromStockup.getText(), jFieldPriceToStockup.getText(),
+                        jFieldAgeFromStockup.getText(), jFieldAgeToStockup.getText(), jFieldDateFromStockup.getText(),
+                        jFieldDateToStockup.getText(), vaccine));
+                ;
                 sManager.initTable(jTableStockup);
             } catch (InputMismatchException ime) {
                 JOptionPane.showMessageDialog(null, ime.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
             }
         } else {
             try {
-                String type = jBoxTypeFromStockup.getSelectedItem() == null ? "" : jBoxTypeFromStockup.getSelectedItem().toString();
-                String vaccine = jBoxVaccineStockup.getSelectedItem() == null ? "" : jBoxVaccineStockup.getSelectedItem().toString();
-                jTableStockup.setModel(sManager.filterOr(jFieldIdFromStockup.getText(), jFieldIdToStockup.getText(), 
-                type, jFieldQuantityFromStockup.getText(), 
-                jFieldQuantityToStockup.getText(), jFieldPriceFromStockup.getText(), 
-                jFieldPriceToStockup.getText(), jFieldAgeFromStockup.getText(), 
-                jFieldAgeToStockup.getText(), jFieldDateFromStockup.getText(), 
-                jFieldDateToStockup.getText(), vaccine));
+                String type = jBoxTypeFromStockup.getSelectedItem() == null ? ""
+                        : jBoxTypeFromStockup.getSelectedItem().toString();
+                String vaccine = jBoxVaccineStockup.getSelectedItem() == null ? ""
+                        : jBoxVaccineStockup.getSelectedItem().toString();
+                jTableStockup.setModel(sManager.filterOr(jFieldIdFromStockup.getText(), jFieldIdToStockup.getText(),
+                        type, jFieldQuantityFromStockup.getText(),
+                        jFieldQuantityToStockup.getText(), jFieldPriceFromStockup.getText(),
+                        jFieldPriceToStockup.getText(), jFieldAgeFromStockup.getText(),
+                        jFieldAgeToStockup.getText(), jFieldDateFromStockup.getText(),
+                        jFieldDateToStockup.getText(), vaccine));
                 sManager.initTable(jTableStockup);
             } catch (InputMismatchException ime) {
                 JOptionPane.showMessageDialog(null, ime.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
@@ -599,5 +607,98 @@ public class AdminView extends JFrame {
         else if (pro.equals("Ngày Nhập") && type.equals("Descending"))
             jTableStockup.setModel(sManager.sortDateDe());
         sManager.initTable(jTableStockup);
+    }
+
+    public void selectTable() {
+        int selectRow = jTableStockup.getSelectedRow();
+        if (selectRow != -1) {
+            jFieldIdStockup.setText(jTableStockup.getValueAt(selectRow, 0).toString());
+            jBoxTypeStockup.setSelectedItem(jTableStockup.getValueAt(selectRow, 1));
+            jFieldQuantityStockup.setText(jTableStockup.getValueAt(selectRow, 2).toString());
+            jFieldPriceStockup.setText(jTableStockup.getValueAt(selectRow, 3).toString());
+            jFieldAgeStockup.setText(jTableStockup.getValueAt(selectRow, 4).toString());
+            jFieldDateStockup.setText(jTableStockup.getValueAt(selectRow, 5).toString());
+            jBoxVaccineInfoStockup.setSelectedItem(jTableStockup.getValueAt(selectRow, 6));
+        }
+    }
+
+    public void add() {
+        try {
+            String type = jBoxTypeStockup.getSelectedItem() == null ? "" : jBoxTypeStockup.getSelectedItem().toString();
+            String vaccine = jBoxVaccineInfoStockup.getSelectedItem() == null ? "" : jBoxVaccineInfoStockup.getSelectedItem().toString();
+            int option = JOptionPane.showConfirmDialog(null, "Are you sure you want to add?", "CONFIRM",
+                    JOptionPane.YES_NO_OPTION);
+            if (option == JOptionPane.YES_OPTION) {
+                sManager.add(type, jFieldQuantityStockup.getText(), jFieldPriceStockup.getText(), 
+                            jFieldAgeStockup.getText(), jFieldDateStockup.getText(), vaccine);
+                reset();
+                JOptionPane.showMessageDialog(null, "Added successfully!", "INFORMATION", JOptionPane.OK_OPTION);
+            }
+        } catch (InputMismatchException ime) {
+            JOptionPane.showMessageDialog(null, ime.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public void delete() {
+        try {
+            int option = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete", "CONFIRM",
+                    JOptionPane.YES_NO_OPTION);
+            if (option == JOptionPane.YES_OPTION) {
+                sManager.delete(jFieldIdStockup.getText());
+                reset();
+                JOptionPane.showMessageDialog(null, "Deleted successfully!", "INFORMATION", JOptionPane.OK_OPTION);
+            }
+        } catch (InputMismatchException ime) {
+            JOptionPane.showMessageDialog(null, ime.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public void update() {
+        try {
+            String type = jBoxTypeStockup.getSelectedItem() == null ? "" : jBoxTypeStockup.getSelectedItem().toString();
+            String vaccine = jBoxVaccineInfoStockup.getSelectedItem() == null ? "" : jBoxVaccineInfoStockup.getSelectedItem().toString();
+            int option = JOptionPane.showConfirmDialog(null, "Are you sure you want to update?", "CONFIRM",
+                    JOptionPane.YES_NO_OPTION);
+            if (option == JOptionPane.YES_OPTION) {
+                sManager.update(jFieldIdStockup.getText(), type, jFieldQuantityStockup.getText(), jFieldPriceStockup.getText(), 
+                            jFieldAgeStockup.getText(), jFieldDateStockup.getText(), vaccine);
+                reset();
+                JOptionPane.showMessageDialog(null, "Updated successfully!", "INFORMATION", JOptionPane.OK_OPTION);
+            }
+        } catch (InputMismatchException ime) {
+            JOptionPane.showMessageDialog(null, ime.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public void cancel() {
+        reset();
+    }
+
+    public void reset() {
+        jTableStockup.setModel(sManager.getdModel());
+        sManager.initTable(jTableStockup);
+        jFieldSearchStockup.setText("");
+        property.setSelectedItem("ID");
+        sortType.setSelectedItem("Ascending");
+        jFieldIdFromStockup.setText("");
+        jFieldIdToStockup.setText("");
+        jBoxTypeFromStockup.setSelectedItem(null);
+        jFieldQuantityFromStockup.setText("");
+        jFieldQuantityToStockup.setText("");
+        jFieldPriceFromStockup.setText("");
+        jFieldPriceToStockup.setText("");
+        jFieldAgeFromStockup.setText("");
+        jFieldAgeToStockup.setText("");
+        jFieldDateFromStockup.setText("");
+        jFieldDateToStockup.setText("");
+        jBoxVaccineStockup.setSelectedItem(null);
+        jBoxOptionStock.setSelectedItem("AND");
+        jFieldIdStockup.setText("");
+        jBoxTypeStockup.setSelectedItem(null);
+        jFieldQuantityStockup.setText("");
+        jFieldPriceStockup.setText("");
+        jFieldAgeStockup.setText("");
+        jFieldDateStockup.setText("");
+        jBoxVaccineInfoStockup.setSelectedItem(null);
     }
 }

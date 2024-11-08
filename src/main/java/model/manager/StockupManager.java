@@ -1,16 +1,15 @@
 package model.manager;
 
-import java.awt.Dimension;
 import java.awt.Font;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.net.Inet4Address;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.text.ParseException;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -23,9 +22,7 @@ import java.util.List;
 import java.util.Vector;
 
 import javax.swing.JTable;
-import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableRowSorter;
 
 import model.checker.Checker;
 import model.order.StockupOrder;
@@ -88,29 +85,29 @@ public class StockupManager {
         if (query.equals("")) {
             input();
             throw new InputMismatchException("Please enter text in the search box!");
-        }
-        else
+        } else
             dModel = new DefaultTableModel();
-            dModel.setColumnIdentifiers(
+        dModel.setColumnIdentifiers(
                 new String[] { "ID", "Giống Lợn", "Số Lượng", "Giá", "Ngày Tuổi", "Ngày Nhập", "Tiêm Chủng" });
-                try (BufferedReader bReader = new BufferedReader(new FileReader(new File("src/resources/stockup.txt")))) {
-                    String line;
-                    DecimalFormatSymbols dSymbols = new DecimalFormatSymbols();
-                    dSymbols.setGroupingSeparator('.');
-                    DecimalFormat dFormat = new DecimalFormat("#,###");
-                    dFormat.setDecimalFormatSymbols(dSymbols);
-                    while ((line = bReader.readLine()) != null) {
-                        if (line.toLowerCase().contains(query.toLowerCase())) {
-                            String[] row = line.split(";");
-                            dModel.addRow(
-                                new Object[] { row[0], row[1], row[2], dFormat.format(Long.parseLong(row[3])), row[4], row[5], row[6] });
-                        }
-                    }
-                } catch (FileNotFoundException fnfe) {
-                    fnfe.getStackTrace();
-                } catch (IOException ioe) {
-                    ioe.getStackTrace();
+        try (BufferedReader bReader = new BufferedReader(new FileReader(new File("src/resources/stockup.txt")))) {
+            String line;
+            DecimalFormatSymbols dSymbols = new DecimalFormatSymbols();
+            dSymbols.setGroupingSeparator('.');
+            DecimalFormat dFormat = new DecimalFormat("#,###");
+            dFormat.setDecimalFormatSymbols(dSymbols);
+            while ((line = bReader.readLine()) != null) {
+                if (line.toLowerCase().contains(query.toLowerCase())) {
+                    String[] row = line.split(";");
+                    dModel.addRow(
+                            new Object[] { row[0], row[1], row[2], dFormat.format(Long.parseLong(row[3])), row[4],
+                                    row[5], row[6] });
                 }
+            }
+        } catch (FileNotFoundException fnfe) {
+            fnfe.getStackTrace();
+        } catch (IOException ioe) {
+            ioe.getStackTrace();
+        }
     }
 
     // filter and
@@ -132,7 +129,7 @@ public class StockupManager {
 
         DefaultTableModel tempModel = new DefaultTableModel();
         tempModel.setColumnIdentifiers(
-            new String[] { "ID", "Giống Lợn", "Số Lượng", "Giá", "Ngày Tuổi", "Ngày Nhập", "Tiêm Chủng" });
+                new String[] { "ID", "Giống Lợn", "Số Lượng", "Giá", "Ngày Tuổi", "Ngày Nhập", "Tiêm Chủng" });
 
         Vector<Vector> rows = dModel.getDataVector();
         for (Vector<String> row : rows) {
@@ -150,24 +147,24 @@ public class StockupManager {
                 int age = Integer.parseInt(row.get(4).toString());
                 DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                 LocalDate date = LocalDate.parse(row.get(5).toString(), dFormatter);
-    
+
                 if (id >= idf && id <= idt && (type.equals("") || row.get(1).equals(type))
-                && quantity >= quantityf && quantity <= quantityt
-                && price >= pricef && price <= pricet
-                && age >= agef && age <= aget
-                && (date.isAfter(datef) || date.isEqual(datef))
-                && (date.isBefore(datet) || date.isEqual(datet))
-                && (vaccine.equals("") || row.get(6).equals(vaccine)))
-                tempModel.addRow(
-                        new Object[] { row.get(0), row.get(1), row.get(2), dFormat.format(price), row.get(4), row.get(5), row.get(6) });
+                        && quantity >= quantityf && quantity <= quantityt
+                        && price >= pricef && price <= pricet
+                        && age >= agef && age <= aget
+                        && (date.isAfter(datef) || date.isEqual(datef))
+                        && (date.isBefore(datet) || date.isEqual(datet))
+                        && (vaccine.equals("") || row.get(6).equals(vaccine)))
+                    tempModel.addRow(
+                            new Object[] { row.get(0), row.get(1), row.get(2), dFormat.format(price), row.get(4),
+                                    row.get(5), row.get(6) });
             } catch (NumberFormatException nfe) {
                 nfe.printStackTrace();
             }
-           
-        }  
+
+        }
         return tempModel;
     }
-    
 
     // filter or
     public DefaultTableModel filterOr(String idF, String idT, String type, String quantityF, String quantityT,
@@ -188,7 +185,7 @@ public class StockupManager {
 
         DefaultTableModel tempModel = new DefaultTableModel();
         tempModel.setColumnIdentifiers(
-            new String[] { "ID", "Giống Lợn", "Số Lượng", "Giá", "Ngày Tuổi", "Ngày Nhập", "Tiêm Chủng" });
+                new String[] { "ID", "Giống Lợn", "Số Lượng", "Giá", "Ngày Tuổi", "Ngày Nhập", "Tiêm Chủng" });
 
         Vector<Vector> rows = dModel.getDataVector();
         for (Vector<String> row : rows) {
@@ -206,21 +203,23 @@ public class StockupManager {
                 int age = Integer.parseInt(row.get(4).toString());
                 DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                 LocalDate date = LocalDate.parse(row.get(5).toString(), dFormatter);
-    
-                if ((id >= idf && id <= idt) 
-                || (!type.equals("") && row.get(1).equals(type))
-                || (quantity >= quantityf && quantity <= quantityt)
-                || (price >= pricef && price <= pricet)
-                || (age >= agef && age <= aget)
-                || ((date.isAfter(datef) || date.isEqual(datef)) && (date.isBefore(datet) || date.isEqual(datet)))
-                || (!vaccine.equals("") && row.get(6).equals(vaccine)))
-                tempModel.addRow(
-                        new Object[] { row.get(0), row.get(1), row.get(2), dFormat.format(price), row.get(4), row.get(5), row.get(6) });
+
+                if ((id >= idf && id <= idt)
+                        || (!type.equals("") && row.get(1).equals(type))
+                        || (quantity >= quantityf && quantity <= quantityt)
+                        || (price >= pricef && price <= pricet)
+                        || (age >= agef && age <= aget)
+                        || ((date.isAfter(datef) || date.isEqual(datef))
+                                && (date.isBefore(datet) || date.isEqual(datet)))
+                        || (!vaccine.equals("") && row.get(6).equals(vaccine)))
+                    tempModel.addRow(
+                            new Object[] { row.get(0), row.get(1), row.get(2), dFormat.format(price), row.get(4),
+                                    row.get(5), row.get(6) });
             } catch (NumberFormatException nfe) {
                 nfe.printStackTrace();
             }
-           
-        }  
+
+        }
         return tempModel;
     }
 
@@ -229,8 +228,8 @@ public class StockupManager {
         DefaultTableModel tempModel = new DefaultTableModel();
         list = new ArrayList<>();
         tempModel.setColumnIdentifiers(
-            new String[] { "ID", "Giống Lợn", "Số Lượng", "Giá", "Ngày Tuổi", "Ngày Nhập", "Tiêm Chủng" });
-        
+                new String[] { "ID", "Giống Lợn", "Số Lượng", "Giá", "Ngày Tuổi", "Ngày Nhập", "Tiêm Chủng" });
+
         DecimalFormatSymbols dSymbols = new DecimalFormatSymbols();
         dSymbols.setGroupingSeparator('.');
         DecimalFormat dFormat = new DecimalFormat("#,###");
@@ -258,7 +257,8 @@ public class StockupManager {
         });
 
         for (StockupOrder s : list) {
-            tempModel.addRow( new Object[] { s.getId(), s.getType(), s.getQuantity(), dFormat.format(s.getPrice()), s.getAge(), s.getDate(), s.isVaccineStatus() });
+            tempModel.addRow(new Object[] { s.getId(), s.getType(), s.getQuantity(), dFormat.format(s.getPrice()),
+                    s.getAge(), s.getDate(), s.isVaccineStatus() });
         }
         return tempModel;
     }
@@ -268,8 +268,8 @@ public class StockupManager {
         DefaultTableModel tempModel = new DefaultTableModel();
         list = new ArrayList<>();
         tempModel.setColumnIdentifiers(
-            new String[] { "ID", "Giống Lợn", "Số Lượng", "Giá", "Ngày Tuổi", "Ngày Nhập", "Tiêm Chủng" });
-        
+                new String[] { "ID", "Giống Lợn", "Số Lượng", "Giá", "Ngày Tuổi", "Ngày Nhập", "Tiêm Chủng" });
+
         DecimalFormatSymbols dSymbols = new DecimalFormatSymbols();
         dSymbols.setGroupingSeparator('.');
         DecimalFormat dFormat = new DecimalFormat("#,###");
@@ -297,7 +297,8 @@ public class StockupManager {
         });
 
         for (StockupOrder s : list) {
-            tempModel.addRow( new Object[] { s.getId(), s.getType(), s.getQuantity(), dFormat.format(s.getPrice()), s.getAge(), s.getDate(), s.isVaccineStatus() });
+            tempModel.addRow(new Object[] { s.getId(), s.getType(), s.getQuantity(), dFormat.format(s.getPrice()),
+                    s.getAge(), s.getDate(), s.isVaccineStatus() });
         }
         return tempModel;
     }
@@ -307,8 +308,8 @@ public class StockupManager {
         DefaultTableModel tempModel = new DefaultTableModel();
         list = new ArrayList<>();
         tempModel.setColumnIdentifiers(
-            new String[] { "ID", "Giống Lợn", "Số Lượng", "Giá", "Ngày Tuổi", "Ngày Nhập", "Tiêm Chủng" });
-        
+                new String[] { "ID", "Giống Lợn", "Số Lượng", "Giá", "Ngày Tuổi", "Ngày Nhập", "Tiêm Chủng" });
+
         DecimalFormatSymbols dSymbols = new DecimalFormatSymbols();
         dSymbols.setGroupingSeparator('.');
         DecimalFormat dFormat = new DecimalFormat("#,###");
@@ -336,7 +337,8 @@ public class StockupManager {
         });
 
         for (StockupOrder s : list) {
-            tempModel.addRow( new Object[] { s.getId(), s.getType(), s.getQuantity(), dFormat.format(s.getPrice()), s.getAge(), s.getDate(), s.isVaccineStatus() });
+            tempModel.addRow(new Object[] { s.getId(), s.getType(), s.getQuantity(), dFormat.format(s.getPrice()),
+                    s.getAge(), s.getDate(), s.isVaccineStatus() });
         }
         return tempModel;
     }
@@ -346,8 +348,8 @@ public class StockupManager {
         DefaultTableModel tempModel = new DefaultTableModel();
         list = new ArrayList<>();
         tempModel.setColumnIdentifiers(
-            new String[] { "ID", "Giống Lợn", "Số Lượng", "Giá", "Ngày Tuổi", "Ngày Nhập", "Tiêm Chủng" });
-        
+                new String[] { "ID", "Giống Lợn", "Số Lượng", "Giá", "Ngày Tuổi", "Ngày Nhập", "Tiêm Chủng" });
+
         DecimalFormatSymbols dSymbols = new DecimalFormatSymbols();
         dSymbols.setGroupingSeparator('.');
         DecimalFormat dFormat = new DecimalFormat("#,###");
@@ -375,7 +377,8 @@ public class StockupManager {
         });
 
         for (StockupOrder s : list) {
-            tempModel.addRow( new Object[] { s.getId(), s.getType(), s.getQuantity(), dFormat.format(s.getPrice()), s.getAge(), s.getDate(), s.isVaccineStatus() });
+            tempModel.addRow(new Object[] { s.getId(), s.getType(), s.getQuantity(), dFormat.format(s.getPrice()),
+                    s.getAge(), s.getDate(), s.isVaccineStatus() });
         }
         return tempModel;
     }
@@ -385,8 +388,8 @@ public class StockupManager {
         DefaultTableModel tempModel = new DefaultTableModel();
         list = new ArrayList<>();
         tempModel.setColumnIdentifiers(
-            new String[] { "ID", "Giống Lợn", "Số Lượng", "Giá", "Ngày Tuổi", "Ngày Nhập", "Tiêm Chủng" });
-        
+                new String[] { "ID", "Giống Lợn", "Số Lượng", "Giá", "Ngày Tuổi", "Ngày Nhập", "Tiêm Chủng" });
+
         DecimalFormatSymbols dSymbols = new DecimalFormatSymbols();
         dSymbols.setGroupingSeparator('.');
         DecimalFormat dFormat = new DecimalFormat("#,###");
@@ -414,7 +417,8 @@ public class StockupManager {
         });
 
         for (StockupOrder s : list) {
-            tempModel.addRow( new Object[] { s.getId(), s.getType(), s.getQuantity(), dFormat.format(s.getPrice()), s.getAge(), s.getDate(), s.isVaccineStatus() });
+            tempModel.addRow(new Object[] { s.getId(), s.getType(), s.getQuantity(), dFormat.format(s.getPrice()),
+                    s.getAge(), s.getDate(), s.isVaccineStatus() });
         }
         return tempModel;
     }
@@ -424,8 +428,8 @@ public class StockupManager {
         DefaultTableModel tempModel = new DefaultTableModel();
         list = new ArrayList<>();
         tempModel.setColumnIdentifiers(
-            new String[] { "ID", "Giống Lợn", "Số Lượng", "Giá", "Ngày Tuổi", "Ngày Nhập", "Tiêm Chủng" });
-        
+                new String[] { "ID", "Giống Lợn", "Số Lượng", "Giá", "Ngày Tuổi", "Ngày Nhập", "Tiêm Chủng" });
+
         DecimalFormatSymbols dSymbols = new DecimalFormatSymbols();
         dSymbols.setGroupingSeparator('.');
         DecimalFormat dFormat = new DecimalFormat("#,###");
@@ -453,7 +457,8 @@ public class StockupManager {
         });
 
         for (StockupOrder s : list) {
-            tempModel.addRow( new Object[] { s.getId(), s.getType(), s.getQuantity(), dFormat.format(s.getPrice()), s.getAge(), s.getDate(), s.isVaccineStatus() });
+            tempModel.addRow(new Object[] { s.getId(), s.getType(), s.getQuantity(), dFormat.format(s.getPrice()),
+                    s.getAge(), s.getDate(), s.isVaccineStatus() });
         }
         return tempModel;
     }
@@ -463,8 +468,8 @@ public class StockupManager {
         DefaultTableModel tempModel = new DefaultTableModel();
         list = new ArrayList<>();
         tempModel.setColumnIdentifiers(
-            new String[] { "ID", "Giống Lợn", "Số Lượng", "Giá", "Ngày Tuổi", "Ngày Nhập", "Tiêm Chủng" });
-        
+                new String[] { "ID", "Giống Lợn", "Số Lượng", "Giá", "Ngày Tuổi", "Ngày Nhập", "Tiêm Chủng" });
+
         DecimalFormatSymbols dSymbols = new DecimalFormatSymbols();
         dSymbols.setGroupingSeparator('.');
         DecimalFormat dFormat = new DecimalFormat("#,###");
@@ -492,7 +497,8 @@ public class StockupManager {
         });
 
         for (StockupOrder s : list) {
-            tempModel.addRow( new Object[] { s.getId(), s.getType(), s.getQuantity(), dFormat.format(s.getPrice()), s.getAge(), s.getDate(), s.isVaccineStatus() });
+            tempModel.addRow(new Object[] { s.getId(), s.getType(), s.getQuantity(), dFormat.format(s.getPrice()),
+                    s.getAge(), s.getDate(), s.isVaccineStatus() });
         }
         return tempModel;
     }
@@ -502,8 +508,8 @@ public class StockupManager {
         DefaultTableModel tempModel = new DefaultTableModel();
         list = new ArrayList<>();
         tempModel.setColumnIdentifiers(
-            new String[] { "ID", "Giống Lợn", "Số Lượng", "Giá", "Ngày Tuổi", "Ngày Nhập", "Tiêm Chủng" });
-        
+                new String[] { "ID", "Giống Lợn", "Số Lượng", "Giá", "Ngày Tuổi", "Ngày Nhập", "Tiêm Chủng" });
+
         DecimalFormatSymbols dSymbols = new DecimalFormatSymbols();
         dSymbols.setGroupingSeparator('.');
         DecimalFormat dFormat = new DecimalFormat("#,###");
@@ -531,7 +537,8 @@ public class StockupManager {
         });
 
         for (StockupOrder s : list) {
-            tempModel.addRow( new Object[] { s.getId(), s.getType(), s.getQuantity(), dFormat.format(s.getPrice()), s.getAge(), s.getDate(), s.isVaccineStatus() });
+            tempModel.addRow(new Object[] { s.getId(), s.getType(), s.getQuantity(), dFormat.format(s.getPrice()),
+                    s.getAge(), s.getDate(), s.isVaccineStatus() });
         }
         return tempModel;
     }
@@ -541,8 +548,8 @@ public class StockupManager {
         DefaultTableModel tempModel = new DefaultTableModel();
         list = new ArrayList<>();
         tempModel.setColumnIdentifiers(
-            new String[] { "ID", "Giống Lợn", "Số Lượng", "Giá", "Ngày Tuổi", "Ngày Nhập", "Tiêm Chủng" });
-        
+                new String[] { "ID", "Giống Lợn", "Số Lượng", "Giá", "Ngày Tuổi", "Ngày Nhập", "Tiêm Chủng" });
+
         DecimalFormatSymbols dSymbols = new DecimalFormatSymbols();
         dSymbols.setGroupingSeparator('.');
         DecimalFormat dFormat = new DecimalFormat("#,###");
@@ -570,7 +577,8 @@ public class StockupManager {
         });
 
         for (StockupOrder s : list) {
-            tempModel.addRow( new Object[] { s.getId(), s.getType(), s.getQuantity(), dFormat.format(s.getPrice()), s.getAge(), s.getDate(), s.isVaccineStatus() });
+            tempModel.addRow(new Object[] { s.getId(), s.getType(), s.getQuantity(), dFormat.format(s.getPrice()),
+                    s.getAge(), s.getDate(), s.isVaccineStatus() });
         }
         return tempModel;
     }
@@ -580,8 +588,8 @@ public class StockupManager {
         DefaultTableModel tempModel = new DefaultTableModel();
         list = new ArrayList<>();
         tempModel.setColumnIdentifiers(
-            new String[] { "ID", "Giống Lợn", "Số Lượng", "Giá", "Ngày Tuổi", "Ngày Nhập", "Tiêm Chủng" });
-        
+                new String[] { "ID", "Giống Lợn", "Số Lượng", "Giá", "Ngày Tuổi", "Ngày Nhập", "Tiêm Chủng" });
+
         DecimalFormatSymbols dSymbols = new DecimalFormatSymbols();
         dSymbols.setGroupingSeparator('.');
         DecimalFormat dFormat = new DecimalFormat("#,###");
@@ -609,11 +617,92 @@ public class StockupManager {
         });
 
         for (StockupOrder s : list) {
-            tempModel.addRow( new Object[] { s.getId(), s.getType(), s.getQuantity(), dFormat.format(s.getPrice()), s.getAge(), s.getDate(), s.isVaccineStatus() });
+            tempModel.addRow(new Object[] { s.getId(), s.getType(), s.getQuantity(), dFormat.format(s.getPrice()),
+                    s.getAge(), s.getDate(), s.isVaccineStatus() });
         }
         return tempModel;
     }
 
+    // add
+    public void add(String type, String quantity, String price, String age, String date, String vaccine)
+            throws InputMismatchException {
+        Checker.checkEmpty("0", type, quantity, price, age, date, vaccine);
+        Checker.check("0", quantity, price.replace(".", ""), age, date);
+
+        input();
+        dModel.addRow(new Object[] { dModel.getRowCount() + 1, type, quantity, price, age, date, vaccine });
+        try (BufferedWriter bWriter = new BufferedWriter(new FileWriter(new File("src/resources/stockup.txt"), true))) {
+            String data = (dModel.getRowCount()) + ";" + type + ";" + quantity + ";" + price.replace(".", "") + ";" + age + ";" + date + ";" + vaccine + "\n" ;
+            bWriter.write(data);
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }
+
+    // delete
+    public void delete(String id) throws InputMismatchException {
+        Checker.checkIdEmpty(id);
+        Checker.checkId(id);
+        
+        List<String> lines = new ArrayList<>();
+        try (BufferedReader bReader = new BufferedReader(new FileReader(new File("src/resources/stockup.txt")))) {
+            String line;
+            while((line = bReader.readLine()) != null) {
+                String[] row = line.split(";");
+                if (!row[0].equals(id))
+                    lines.add(row[1] + ";" + row[2] + ";" + row[3] + ";" + row[4] + ";" + row[5] + ";" + row[6]);
+            }
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+
+        try (BufferedWriter bWriter = new BufferedWriter(new FileWriter(new File("src/resources/stockup.txt")))) {
+            int i = 1;
+            for (String l : lines)
+                bWriter.write(i++ + ";" + l + "\n");
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+
+        input();
+    }
+
+    // update
+    public void update(String id, String type, String quantity, String price, String age, String date, String vaccine)
+        throws InputMismatchException {
+        Checker.checkEmpty(id, type, quantity, price, age, date, vaccine);
+        Checker.check(id, quantity, price.replace(".", ""), age, date);
+
+        List<String> lines = new ArrayList<>();
+        try (BufferedReader bReader = new BufferedReader(new FileReader(new File("src/resources/stockup.txt")))) {
+            String line;
+            while((line = bReader.readLine()) != null) {
+                String[] row = line.split(";");
+                if (row[0].equals(id)) {
+                    row[1] = type;
+                    row[2] = quantity;
+                    row[3] = price.replace(".", "");
+                    row[4] = age;
+                    row[5] = date;
+                    row[6] = vaccine;
+                }
+                lines.add(row[1] + ";" + row[2] + ";" + row[3] + ";" + row[4] + ";" + row[5] + ";" + row[6]);
+            }
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+
+        try (BufferedWriter bWriter = new BufferedWriter(new FileWriter(new File("src/resources/stockup.txt")))) {
+            int i = 1;
+            for (String l : lines)
+                bWriter.write(i++ + ";" + l + "\n");
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+
+        input();
+
+    }
 
     private int parse(String input, int defaultValue) {
         try {
