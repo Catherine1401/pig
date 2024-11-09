@@ -214,7 +214,8 @@ public class LoginView extends JFrame {
                 new AdminView();
                 setVisible(false);
             } else if (cManager.checkLogin(username, password)) {
-                JOptionPane.showMessageDialog(null, "Successfully!", "CLM", JOptionPane.INFORMATION_MESSAGE);
+                new CustomerView();
+                setVisible(false);
             } else {
                 resetLogin();
                 JOptionPane.showMessageDialog(null, "Username or password is incorrect!", "ERROR",

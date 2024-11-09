@@ -322,8 +322,12 @@ public class AdminView extends JFrame {
         jPanelFilter.add(jButtonFilter, gbc);
 
         // --- add table ---
-        jTableStockup = new JTable(sManager.getdModel());
-        // jTableStockup.setRowSorter(sManager.gettSorter());
+        jTableStockup = new JTable(sManager.getdModel()) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         sManager.initTable(jTableStockup);
         MouseListener mListener = new AdminController(this);
         jTableStockup.addMouseListener(mListener);

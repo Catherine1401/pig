@@ -3,7 +3,6 @@ package clm;
 
 import javax.swing.UIManager;
 
-import view.AdminView;
 import view.LoginView;
 
 public class Pig {

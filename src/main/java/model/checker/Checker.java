@@ -67,9 +67,9 @@ public class Checker {
     public static void checkPrice(String price) throws InputMismatchException {
         try {
             Long clm = Long.parseLong(price);
-            if (clm <= 100000 || clm > 5000000)
+            if (clm <= 50000 || clm > 5000000)
                 throw new InputMismatchException(
-                        "The price must be greater than 100.000 and less than or equal to 5.000.000!");
+                        "The price must be greater than 50.000 and less than or equal to 5.000.000!");
         } catch (NumberFormatException nfe) {
             throw new InputMismatchException("Price must be a valid integer!");
         }

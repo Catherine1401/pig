@@ -234,6 +234,7 @@ public class StockupManager {
         dSymbols.setGroupingSeparator('.');
         DecimalFormat dFormat = new DecimalFormat("#,###");
         dFormat.setDecimalFormatSymbols(dSymbols);
+        DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         Vector<Vector> rows = dModel.getDataVector();
         for (Vector<String> row : rows) {
@@ -243,7 +244,6 @@ public class StockupManager {
             String str = row.get(3).toString().replace(".", "");
             long price = Long.parseLong(str);
             int age = Integer.parseInt(row.get(4).toString());
-            DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate date = LocalDate.parse(row.get(5).toString(), dFormatter);
             boolean vaccine = Boolean.parseBoolean(row.get(6));
             list.add(new StockupOrder(id, pigBread, quantity, price, age, date, vaccine));
@@ -258,7 +258,7 @@ public class StockupManager {
 
         for (StockupOrder s : list) {
             tempModel.addRow(new Object[] { s.getId(), s.getType(), s.getQuantity(), dFormat.format(s.getPrice()),
-                    s.getAge(), s.getDate(), s.isVaccineStatus() });
+                    s.getAge(), s.getDate().format(dFormatter), s.isVaccineStatus() });
         }
         return tempModel;
     }
@@ -274,6 +274,7 @@ public class StockupManager {
         dSymbols.setGroupingSeparator('.');
         DecimalFormat dFormat = new DecimalFormat("#,###");
         dFormat.setDecimalFormatSymbols(dSymbols);
+        DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         Vector<Vector> rows = dModel.getDataVector();
         for (Vector<String> row : rows) {
@@ -283,7 +284,6 @@ public class StockupManager {
             String str = row.get(3).toString().replace(".", "");
             long price = Long.parseLong(str);
             int age = Integer.parseInt(row.get(4).toString());
-            DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate date = LocalDate.parse(row.get(5).toString(), dFormatter);
             boolean vaccine = Boolean.parseBoolean(row.get(6));
             list.add(new StockupOrder(id, pigBread, quantity, price, age, date, vaccine));
@@ -298,7 +298,7 @@ public class StockupManager {
 
         for (StockupOrder s : list) {
             tempModel.addRow(new Object[] { s.getId(), s.getType(), s.getQuantity(), dFormat.format(s.getPrice()),
-                    s.getAge(), s.getDate(), s.isVaccineStatus() });
+                    s.getAge(), s.getDate().format(dFormatter), s.isVaccineStatus() });
         }
         return tempModel;
     }
@@ -314,6 +314,7 @@ public class StockupManager {
         dSymbols.setGroupingSeparator('.');
         DecimalFormat dFormat = new DecimalFormat("#,###");
         dFormat.setDecimalFormatSymbols(dSymbols);
+        DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         Vector<Vector> rows = dModel.getDataVector();
         for (Vector<String> row : rows) {
@@ -323,7 +324,6 @@ public class StockupManager {
             String str = row.get(3).toString().replace(".", "");
             long price = Long.parseLong(str);
             int age = Integer.parseInt(row.get(4).toString());
-            DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate date = LocalDate.parse(row.get(5).toString(), dFormatter);
             boolean vaccine = Boolean.parseBoolean(row.get(6));
             list.add(new StockupOrder(id, pigBread, quantity, price, age, date, vaccine));
@@ -338,7 +338,7 @@ public class StockupManager {
 
         for (StockupOrder s : list) {
             tempModel.addRow(new Object[] { s.getId(), s.getType(), s.getQuantity(), dFormat.format(s.getPrice()),
-                    s.getAge(), s.getDate(), s.isVaccineStatus() });
+                    s.getAge(), s.getDate().format(dFormatter), s.isVaccineStatus() });
         }
         return tempModel;
     }
@@ -354,6 +354,7 @@ public class StockupManager {
         dSymbols.setGroupingSeparator('.');
         DecimalFormat dFormat = new DecimalFormat("#,###");
         dFormat.setDecimalFormatSymbols(dSymbols);
+        DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         Vector<Vector> rows = dModel.getDataVector();
         for (Vector<String> row : rows) {
@@ -363,7 +364,6 @@ public class StockupManager {
             String str = row.get(3).toString().replace(".", "");
             long price = Long.parseLong(str);
             int age = Integer.parseInt(row.get(4).toString());
-            DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate date = LocalDate.parse(row.get(5).toString(), dFormatter);
             boolean vaccine = Boolean.parseBoolean(row.get(6));
             list.add(new StockupOrder(id, pigBread, quantity, price, age, date, vaccine));
@@ -378,7 +378,7 @@ public class StockupManager {
 
         for (StockupOrder s : list) {
             tempModel.addRow(new Object[] { s.getId(), s.getType(), s.getQuantity(), dFormat.format(s.getPrice()),
-                    s.getAge(), s.getDate(), s.isVaccineStatus() });
+                    s.getAge(), s.getDate().format(dFormatter), s.isVaccineStatus() });
         }
         return tempModel;
     }
@@ -394,6 +394,7 @@ public class StockupManager {
         dSymbols.setGroupingSeparator('.');
         DecimalFormat dFormat = new DecimalFormat("#,###");
         dFormat.setDecimalFormatSymbols(dSymbols);
+        DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         Vector<Vector> rows = dModel.getDataVector();
         for (Vector<String> row : rows) {
@@ -403,7 +404,6 @@ public class StockupManager {
             String str = row.get(3).toString().replace(".", "");
             long price = Long.parseLong(str);
             int age = Integer.parseInt(row.get(4).toString());
-            DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate date = LocalDate.parse(row.get(5).toString(), dFormatter);
             boolean vaccine = Boolean.parseBoolean(row.get(6));
             list.add(new StockupOrder(id, pigBread, quantity, price, age, date, vaccine));
@@ -418,7 +418,7 @@ public class StockupManager {
 
         for (StockupOrder s : list) {
             tempModel.addRow(new Object[] { s.getId(), s.getType(), s.getQuantity(), dFormat.format(s.getPrice()),
-                    s.getAge(), s.getDate(), s.isVaccineStatus() });
+                    s.getAge(), s.getDate().format(dFormatter), s.isVaccineStatus() });
         }
         return tempModel;
     }
@@ -434,6 +434,7 @@ public class StockupManager {
         dSymbols.setGroupingSeparator('.');
         DecimalFormat dFormat = new DecimalFormat("#,###");
         dFormat.setDecimalFormatSymbols(dSymbols);
+        DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         Vector<Vector> rows = dModel.getDataVector();
         for (Vector<String> row : rows) {
@@ -443,7 +444,6 @@ public class StockupManager {
             String str = row.get(3).toString().replace(".", "");
             long price = Long.parseLong(str);
             int age = Integer.parseInt(row.get(4).toString());
-            DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate date = LocalDate.parse(row.get(5).toString(), dFormatter);
             boolean vaccine = Boolean.parseBoolean(row.get(6));
             list.add(new StockupOrder(id, pigBread, quantity, price, age, date, vaccine));
@@ -458,7 +458,7 @@ public class StockupManager {
 
         for (StockupOrder s : list) {
             tempModel.addRow(new Object[] { s.getId(), s.getType(), s.getQuantity(), dFormat.format(s.getPrice()),
-                    s.getAge(), s.getDate(), s.isVaccineStatus() });
+                    s.getAge(), s.getDate().format(dFormatter), s.isVaccineStatus() });
         }
         return tempModel;
     }
@@ -474,6 +474,7 @@ public class StockupManager {
         dSymbols.setGroupingSeparator('.');
         DecimalFormat dFormat = new DecimalFormat("#,###");
         dFormat.setDecimalFormatSymbols(dSymbols);
+        DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         Vector<Vector> rows = dModel.getDataVector();
         for (Vector<String> row : rows) {
@@ -483,7 +484,6 @@ public class StockupManager {
             String str = row.get(3).toString().replace(".", "");
             long price = Long.parseLong(str);
             int age = Integer.parseInt(row.get(4).toString());
-            DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate date = LocalDate.parse(row.get(5).toString(), dFormatter);
             boolean vaccine = Boolean.parseBoolean(row.get(6));
             list.add(new StockupOrder(id, pigBread, quantity, price, age, date, vaccine));
@@ -498,7 +498,7 @@ public class StockupManager {
 
         for (StockupOrder s : list) {
             tempModel.addRow(new Object[] { s.getId(), s.getType(), s.getQuantity(), dFormat.format(s.getPrice()),
-                    s.getAge(), s.getDate(), s.isVaccineStatus() });
+                    s.getAge(), s.getDate().format(dFormatter), s.isVaccineStatus() });
         }
         return tempModel;
     }
@@ -514,6 +514,7 @@ public class StockupManager {
         dSymbols.setGroupingSeparator('.');
         DecimalFormat dFormat = new DecimalFormat("#,###");
         dFormat.setDecimalFormatSymbols(dSymbols);
+        DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         Vector<Vector> rows = dModel.getDataVector();
         for (Vector<String> row : rows) {
@@ -523,7 +524,6 @@ public class StockupManager {
             String str = row.get(3).toString().replace(".", "");
             long price = Long.parseLong(str);
             int age = Integer.parseInt(row.get(4).toString());
-            DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate date = LocalDate.parse(row.get(5).toString(), dFormatter);
             boolean vaccine = Boolean.parseBoolean(row.get(6));
             list.add(new StockupOrder(id, pigBread, quantity, price, age, date, vaccine));
@@ -538,7 +538,7 @@ public class StockupManager {
 
         for (StockupOrder s : list) {
             tempModel.addRow(new Object[] { s.getId(), s.getType(), s.getQuantity(), dFormat.format(s.getPrice()),
-                    s.getAge(), s.getDate(), s.isVaccineStatus() });
+                    s.getAge(), s.getDate().format(dFormatter), s.isVaccineStatus() });
         }
         return tempModel;
     }
@@ -554,6 +554,7 @@ public class StockupManager {
         dSymbols.setGroupingSeparator('.');
         DecimalFormat dFormat = new DecimalFormat("#,###");
         dFormat.setDecimalFormatSymbols(dSymbols);
+        DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         Vector<Vector> rows = dModel.getDataVector();
         for (Vector<String> row : rows) {
@@ -563,7 +564,6 @@ public class StockupManager {
             String str = row.get(3).toString().replace(".", "");
             long price = Long.parseLong(str);
             int age = Integer.parseInt(row.get(4).toString());
-            DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate date = LocalDate.parse(row.get(5).toString(), dFormatter);
             boolean vaccine = Boolean.parseBoolean(row.get(6));
             list.add(new StockupOrder(id, pigBread, quantity, price, age, date, vaccine));
@@ -578,7 +578,7 @@ public class StockupManager {
 
         for (StockupOrder s : list) {
             tempModel.addRow(new Object[] { s.getId(), s.getType(), s.getQuantity(), dFormat.format(s.getPrice()),
-                    s.getAge(), s.getDate(), s.isVaccineStatus() });
+                    s.getAge(), s.getDate().format(dFormatter), s.isVaccineStatus() });
         }
         return tempModel;
     }
@@ -594,6 +594,7 @@ public class StockupManager {
         dSymbols.setGroupingSeparator('.');
         DecimalFormat dFormat = new DecimalFormat("#,###");
         dFormat.setDecimalFormatSymbols(dSymbols);
+        DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         Vector<Vector> rows = dModel.getDataVector();
         for (Vector<String> row : rows) {
@@ -603,7 +604,6 @@ public class StockupManager {
             String str = row.get(3).toString().replace(".", "");
             long price = Long.parseLong(str);
             int age = Integer.parseInt(row.get(4).toString());
-            DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate date = LocalDate.parse(row.get(5).toString(), dFormatter);
             boolean vaccine = Boolean.parseBoolean(row.get(6));
             list.add(new StockupOrder(id, pigBread, quantity, price, age, date, vaccine));
@@ -618,7 +618,7 @@ public class StockupManager {
 
         for (StockupOrder s : list) {
             tempModel.addRow(new Object[] { s.getId(), s.getType(), s.getQuantity(), dFormat.format(s.getPrice()),
-                    s.getAge(), s.getDate(), s.isVaccineStatus() });
+                    s.getAge(), s.getDate().format(dFormatter), s.isVaccineStatus() });
         }
         return tempModel;
     }
