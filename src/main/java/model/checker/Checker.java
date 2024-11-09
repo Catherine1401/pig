@@ -69,7 +69,7 @@ public class Checker {
             Long clm = Long.parseLong(price);
             if (clm <= 100000 || clm > 5000000)
                 throw new InputMismatchException(
-                        "The price must be greater than 0 and less than or equal to 5.000.000!");
+                        "The price must be greater than 100.000 and less than or equal to 5.000.000!");
         } catch (NumberFormatException nfe) {
             throw new InputMismatchException("Price must be a valid integer!");
         }
@@ -98,6 +98,7 @@ public class Checker {
             throw new InputMismatchException("Date cannot be empty!");
     }
 
+    // check date
     public static void checkDate(String date) throws InputMismatchException {
         DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         try {

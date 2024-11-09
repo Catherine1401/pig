@@ -675,6 +675,7 @@ public class AdminView extends JFrame {
     }
 
     public void reset() {
+        sManager.input();
         jTableStockup.setModel(sManager.getdModel());
         sManager.initTable(jTableStockup);
         jFieldSearchStockup.setText("");
